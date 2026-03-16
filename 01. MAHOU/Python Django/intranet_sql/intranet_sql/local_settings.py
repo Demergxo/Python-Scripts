@@ -1,0 +1,1 @@
+EXTERNAL_DB_ENABLED = False

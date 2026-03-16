@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Inbound{% endblock %}
+
+{% block content %}
+  <h2 class="text-center mb-3">🚚 Inbound</h2>
+  <div class="chart-container">
+    <canvas id="inboundChart"></canvas>
+  </div>
+
+  <script>
+    new Chart(document.getElementById("inboundChart"), {
+      type: "bar",
+      data: {
+        labels: ["Semana 1","Semana 2","Semana 3","Semana 4"],
+        datasets: [{
+          label: "Palets recibidos",
+          data: [300,450,400,500],
+          backgroundColor: "#28a745"
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  </script>
+{% endblock %}
+
+

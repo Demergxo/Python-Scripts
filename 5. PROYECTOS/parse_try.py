@@ -38,6 +38,6 @@ options, args = parser.parse_args()
 tgtHost = options.tgtHost
 tgtPort = options.tgtPort
 
-if tgtHost == None | tgtPort == None:
+if tgtHost == None or tgtPort == None:
     print(parser, args)
     exit(0)

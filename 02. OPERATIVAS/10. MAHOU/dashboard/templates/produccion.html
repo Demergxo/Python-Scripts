@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Producción{% endblock %}
+
+{% block content %}
+  <h2 class="text-center mb-3">📈 Producción</h2>
+  <div class="chart-container">
+    <canvas id="produccionChart"></canvas>
+  </div>
+
+  <script>
+    new Chart(document.getElementById("produccionChart"), {
+      type: "line",
+      data: {
+        labels: ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],
+        datasets: [{
+          label: "Unidades producidas",
+          data: [120,150,180,170,200,220,190],
+          borderColor: "#007bff",
+          backgroundColor: "rgba(0,123,255,0.2)",
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  </script>
+{% endblock %}
+
+

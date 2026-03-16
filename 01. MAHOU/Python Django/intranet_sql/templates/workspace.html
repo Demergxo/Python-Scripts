@@ -1,0 +1,56 @@
+{% extends "base_workspace.html" %}
+{% load extras %}
+
+{% block title %}Workspace{% endblock %}
+
+{% block content %}
+  <h2>Consultas</h2>
+  <p class="muted">Selecciona una categoría y luego una consulta.</p>
+
+  {% for c in categories %}
+    <section class="cat-panel" data-cat="{{ c.id }}" style="display:none; background:white; border:1px solid var(--border); border-radius:var(--radius); padding:18px 22px; margin-bottom:20px;">
+      <h3 style="margin-bottom:10px; color: var(--primary);">{{ c.name }}</h3>
+
+      {% with qs=grouped|get_item:c %}
+        {% if qs %}
+          <ul class="q-list" style="list-style:none; padding:0; margin:0;">
+            {% for q in qs %}
+              <li style="padding:10px 0; border-bottom:1px dashed var(--border); font-size:0.95rem;">
+                <a href="{% url 'query_detail' q.code %}">{{ q.name }}</a>
+               
+                </a>
+                <span class="muted" style="margin-left:6px; font-size:0.85rem;">— {{ q.code }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="muted">No hay consultas en esta categoría.</p>
+        {% endif %}
+      {% endwith %}
+    </section>
+  {% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function showCat(catId) {
+    document.querySelectorAll(".cat-panel").forEach(p => {
+      p.style.display = (p.dataset.cat === String(catId)) ? "block" : "none";
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Si vienes de otra página con ?cat=<id>, abre esa categoría
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get("cat");
+
+    if (cat) {
+      showCat(cat);
+      return;
+    }
+
+    const first = document.querySelector(".cat-panel");
+    if (first) first.style.display = "block";
+  });
+</script>
+{% endblock %}

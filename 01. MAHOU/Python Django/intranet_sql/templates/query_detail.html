@@ -1,0 +1,20 @@
+{% extends "base_workspace.html" %}
+
+{% block title %}{{ query.name }}{% endblock %}
+
+{% block content %}
+  
+
+  <h1 style="margin-top:0;">{{ query.name }}</h1>
+  <p class="muted">{{ query.description }}</p>
+
+  <form method="post" action="{% url 'run_query' query.code %}">
+
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" formaction="{% url 'run_query' query.code %}">Ejecutar</button>
+    <button type="submit" formaction="{% url 'export_excel' query.code %}">Exportar Excel</button>
+    <button type="submit" formaction="{% url 'export_csv' query.code %}">Exportar CSV</button>
+  </form>
+{% endblock %}

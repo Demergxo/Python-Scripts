@@ -1,5 +1,0 @@
-secret
-admin
-1234
-admin1234
-root

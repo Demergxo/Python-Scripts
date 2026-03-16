@@ -1,0 +1,154 @@
+<!-- TEMPLATE: query_run.html -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Workspace{% endblock %}</title>
+
+  <style>
+    :root {
+      --primary: #ff3b00;
+      --primary-hover: #e63600;
+      --bg: #f9f9f9;
+      --sidebar-bg: #ffffff;
+      --border: #e5e5e5;
+      --text: #1f1f1f;
+      --muted: #6f6f6f;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ───────────── Sidebar ───────────── */
+    .sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar h3 {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .cat {
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .cat:hover {
+      background: rgba(255, 59, 0, 0.08);
+      color: var(--primary);
+    }
+
+    .sidebar .muted {
+      margin-top: auto;
+      font-size: 0.85rem;
+    }
+
+    .sidebar a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover { text-decoration: underline; }
+
+    /* ───────────── Content ───────────── */
+    .content { flex: 1; padding: 28px 32px; }
+
+    .topbar {
+      background-color: #ff3b00;
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 600;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+    }
+
+    .topbar strong { font-size: 0.95rem; }
+
+    .logoutbtn {
+      background: white;
+      color: #ff3b00;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .logoutbtn:hover { opacity: 0.9; }
+
+    .muted { color: var(--muted); font-size: 0.9rem; }
+
+    @media (max-width: 900px) { .sidebar { width: 210px; } }
+
+    
+  </style>
+  
+    {% block extra_css %} {% endblock %}
+</head>
+
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h3>Menú</h3>
+
+      {# Si estamos en workspace, usaremos onclick showCat. Si no, link a home. #}
+      {% for c in categories %}
+        {% if sidebar_mode == "workspace" %}
+          <div class="cat" onclick="showCat('{{ c.id }}')">{{ c.name }}</div>
+        {% else %}
+          <a class="cat" href="{% url 'home' %}?cat={{ c.id }}" style="display:block;">
+            {{ c.name }}
+          </a>
+        {% endif %}
+      {% endfor %}
+
+      {% if is_admin %}
+        <p class="muted">
+          <a href="/admin/">Panel de administración</a>
+        </p>
+      {% endif %}
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="logoutbtn" type="submit">Salir</button>
+        </form>
+      </div>
+
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

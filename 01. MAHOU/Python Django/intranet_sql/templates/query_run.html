@@ -1,0 +1,112 @@
+{% extends "base_workspace.html" %}
+
+{% block title %}{{ query.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* OJO: no toques body aquí, porque el base ya define layout */
+  h1 { margin-top: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  th {
+    background-color: #ff3b00;
+    color: white;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+    vertical-align: middle;
+  }
+
+  tr:nth-child(even) td { background-color: #fafafa; }
+  tr:hover td { background-color: #f2f2f2; }
+
+  a {
+    color: #ff3b00;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  a:hover { text-decoration: underline; }
+
+  button {
+    background-color: #ff3b00;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+thead {
+  position: sticky;
+  top: 0;
+}
+
+  button:hover { opacity: 0.9; }
+</style>
+{% endblock %}
+
+{% block content %}
+  
+
+  <h1>{{ query.name }}</h1>
+  <p class="muted">{{ query.description }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Ejecutar</button>
+  </form>
+
+
+
+  {% if ran %}
+    <h2>Resultados</h2>
+    
+
+    <p>
+      <a href="{% url 'export_csv' query.code %}?{{ export_qs }}">Exportar CSV</a>
+      |
+      <a href="{% url 'export_excel' query.code %}?{{ export_qs }}">Exportar Excel</a>
+    </p>
+
+    {% if rows %}
+      <table>
+        <thead>
+          <tr>
+            {% for c in cols %}
+              <th>{{ c }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in rows %}
+            <tr>
+              {% for cell in r %}
+                <td>
+                  {{ cell|default_if_none:"—" }}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No hay filas.</p>
+    {% endif %}
+  {% endif %}
+{% endblock %}

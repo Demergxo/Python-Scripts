@@ -1,0 +1,5 @@
+engine = create_engine("mssql+pyodbc://jgmeras:AloveraMSM25$@XGA_PROD")
+
+=DESREF(Master!$Q$1;1;COINCIDIR(A2;Master!$Q$1:$Q$1;0)-1;CONTARA(DESREF(Master!$Q$1;1;COINCIDIR(A2;Master!$Q$1:$Q$1;0)-1;9));1)
+
+me puedes generar una imagen de un langostino enfadado en formato cartoon y con un titulo a la derecha un logo que ponga "Langustinos"

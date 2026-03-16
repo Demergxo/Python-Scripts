@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Trabajo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; }
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 240px;
+      border-right: 1px solid #ddd;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .sidebar h3 { margin-top: 0; }
+
+    .cat {
+      display: block;
+      padding: 10px 8px;
+      margin-bottom: 6px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .cat:hover { background: #f7f7f7; }
+
+    .content { flex: 1; padding: 20px; box-sizing: border-box; }
+
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px; }
+    .logoutbtn { border: 1px solid #ccc; background: white; padding: 6px 10px; border-radius: 6px; cursor:pointer; }
+
+    .q-list { margin: 0; padding-left: 16px; }
+    .q-list li { margin: 6px 0; }
+    .muted { color: #777; font-size: 0.95em; }
+  </style>
+</head>
+
+<body>
+    {% load extras %}
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Menú</h3>
+
+      {% for c in categories %}
+        <div class="cat" onclick="showCat('{{ c.id }}')">{{ c.name }}</div>
+      {% endfor %}
+
+      {% if uncategorized %}
+        <div class="cat" onclick="showCat('uncat')">Otras</div>
+      {% endif %}
+
+      {% if is_admin %}
+        <p class="muted" style="margin-top: 18px;">
+          <a href="/admin/">Admin</a>
+        </p>
+      {% endif %}
+      
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <div>
+          <strong>{{ request.user.username }}</strong>
+        </div>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="logoutbtn" type="submit">Salir</button>
+        </form>
+      </div>
+
+      <h2>Consultas</h2>
+      <p class="muted">Elige una categoría a la izquierda y luego una consulta.</p>
+
+      {% for c in categories %}
+        <section class="cat-panel" data-cat="{{ c.id }}" style="display:none;">
+          <h3>{{ c.name }}</h3>
+          {% if grouped.c %}
+            <!-- (no se usa así en Django templates) -->
+          {% endif %}
+
+          {% with qs=grouped|get_item:c %}
+            {% if qs %}
+              <ul class="q-list">
+                {% for q in qs %}
+                  <li>
+                    <a href="{% url 'run_query' q.code %}"><strong>{{ q.name }}</strong></a>
+                    <span class="muted">— {{ q.code }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="muted">No hay consultas en esta categoría.</p>
+            {% endif %}
+          {% endwith %}
+        </section>
+      {% endfor %}
+
+      {% if uncategorized %}
+        <section class="cat-panel" data-cat="uncat" style="display:none;">
+          <h3>Otras</h3>
+          <ul class="q-list">
+            {% for q in uncategorized %}
+              <li>
+                <a href="{% url 'run_query' q.code %}"><strong>{{ q.name }}</strong></a>
+                <span class="muted">— {{ q.code }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+
+    </main>
+  </div>
+
+  <script>
+    function showCat(catId) {
+      const panels = document.querySelectorAll(".cat-panel");
+      panels.forEach(p => p.style.display = (p.dataset.cat === String(catId)) ? "block" : "none");
+    }
+    // abre la primera categoría por defecto
+    document.addEventListener("DOMContentLoaded", () => {
+      const first = document.querySelector(".cat-panel");
+      if (first) first.style.display = "block";
+    });
+  </script>
+</body>
+</html>

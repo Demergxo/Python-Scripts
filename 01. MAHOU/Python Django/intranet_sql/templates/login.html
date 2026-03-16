@@ -1,0 +1,189 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+
+  <style>
+    :root{
+      --bg: #f2f2f2;
+      --text: #111;
+      --accent: #ff3b00;   /* naranja tipo GXO */
+      --btn: #b9b9b9;
+      --btn-dark: #9f9f9f;
+      --border: #111;
+    }
+
+    body{
+      margin: 0;
+      background: var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+    }
+
+    /* Layout general como la imagen: mucho aire y el login a la izquierda */
+    .page{
+      position: relative;
+      min-height: 100vh;
+      padding: 42px 56px;
+      box-sizing: border-box;
+    }
+
+    /* Logo */
+    .brand{
+      display: inline-block;
+      font-weight: 900;
+      font-size: 82px;
+      letter-spacing: 2px;
+      color: var(--accent);
+      line-height: 1;
+      margin: 0 0 38px 0;
+      user-select: none;
+    }
+
+    /* Form */
+    .login-form{
+      width: 420px;
+    }
+
+    .row{
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .row label{
+      width: 88px;
+      font-size: 26px;
+    }
+
+    .row input{
+      width: 240px;
+      height: 34px;
+      padding: 4px 10px;
+      font-size: 18px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      background: #fff;
+      box-sizing: border-box;
+    }
+
+    .actions{
+      margin-top: 10px;
+      padding-left: 88px; /* alinear con inputs */
+    }
+
+    .btn{
+      appearance: none;
+      border: 2px solid #6f6f6f;
+      background: linear-gradient(#d6d6d6, var(--btn));
+      color: #111;
+      font-weight: 700;
+      font-size: 26px;
+      padding: 6px 22px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    .btn:active{
+      background: linear-gradient(var(--btn), var(--btn-dark));
+    }
+
+    /* Errores */
+    .errors{
+      margin-top: 14px;
+      padding-left: 88px;
+      color: #b00020;
+      font-size: 14px;
+    }
+
+    /* “Dibujo” grande a la derecha (placeholder) */
+    .right-placeholder{
+      position: absolute;
+      right: 70px;
+      top: 120px;
+      width: 560px;
+      height: 560px;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    @media (max-width: 1100px){
+      .right-placeholder{ display:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- Opción B: si tienes un logo real en static, descomenta esto y comenta el texto -->
+    {# <img src="{% static 'img/gxo.png' %}" alt="GXO" style="height:90px;margin-bottom:38px;"> #}
+    <div class="brand">GXO</div>
+
+    <form method="post" class="login-form" autocomplete="off">
+      {% csrf_token %}
+
+      <div class="row">
+        <label for="id_username">Usuario:</label>
+        {{ form.username }}
+      </div>
+
+      <div class="row">
+        <label for="id_password">Pass:</label>
+        {{ form.password }}
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn">Entrar</button>
+      </div>
+
+      {% if form.errors %}
+        <div class="errors">
+          {% for field in form %}
+            {% for error in field.errors %}
+              <div>{{ error }}</div>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </form>
+
+    <!-- Placeholder tipo “estructura” a la derecha, como en tu imagen -->
+    <svg class="right-placeholder" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#ff3b00" stroke-width="2">
+        <path d="M300 40 L520 160 L520 420 L300 540 L80 420 L80 160 Z" />
+        <path d="M300 140 L440 220 L440 360 L300 440 L160 360 L160 220 Z" />
+        <path d="M300 240 L360 280 L360 320 L300 360 L240 320 L240 280 Z" />
+        <path d="M80 160 L300 280 L520 160" />
+        <path d="M80 420 L300 320 L520 420" />
+        <path d="M160 220 L300 320 L440 220" />
+        <path d="M160 360 L300 280 L440 360" />
+        <path d="M300 280 L300 540" stroke-dasharray="5 6" />
+        <path d="M80 160 L80 420" stroke-dasharray="5 6" />
+        <path d="M520 160 L520 420" stroke-dasharray="5 6" />
+      </g>
+    </svg>
+
+  </div>
+
+  <script>
+    // Asegura IDs correctos aunque Django renderice widgets distintos
+    (function() {
+      const u = document.getElementById("id_username");
+      const p = document.getElementById("id_password");
+      if (u) { u.setAttribute("placeholder", ""); u.setAttribute("autofocus", "autofocus"); }
+      if (p) { p.setAttribute("placeholder", ""); }
+    })();
+  </script>
+</body>
+</html>
+
+

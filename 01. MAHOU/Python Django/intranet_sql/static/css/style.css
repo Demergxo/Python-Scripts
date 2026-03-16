@@ -1,0 +1,24 @@
+.topbar {
+    background-color: #ff3b00;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 600;
+
+    padding: 12px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logoutbtn {
+    background: white;
+    color: #ff3b00;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+

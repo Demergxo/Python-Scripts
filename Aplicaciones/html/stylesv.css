@@ -32,8 +32,9 @@ h5 {
 }
 
 .logo {
+    
     border-top: 4px solid #648880;
-    float: left;
+    float: right;
     font-size: 48px;
     line-height: 44px;
     padding: 40px 0 22px 0;
@@ -82,12 +83,13 @@ body {
 /* Typography */
 
 table, th, td {
-    border:1px solid black;
+    border:2px solid black;
     padding: 8px;
+    /*margin-left: 200px;*/
   }
 
 h1, h2, h3, h4 {
-    color: #648880;
+    color: #374d48;
 }
 
 h1 {
@@ -109,7 +111,7 @@ h4 {
 }
 
 h5 {
-    color: #a9b2b9;
+    color: #0a1218;
     font-size: 14px;
     font-weight: 400;
 }
@@ -128,11 +130,22 @@ cite, em {
     line-height: 22px;
 }
 
+section {
+    background-image: url("https://img.freepik.com/foto-gratis/nube-blanca-cielo-azul_74190-2381.jpg");
+    float: left;
+    margin: 0 1.5%;
+    width: 30%;
+}
 
+aside{
+    
+    margin: 20px;
+}
 /* NAVIGATION */
 
 .nav {
-    text-align: center;
+    padding-top: 10px;
+    text-align: left;
     color: blue;
 }
 

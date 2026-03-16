@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Outbound{% endblock %}
+
+{% block content %}
+  <h2 class="text-center mb-3">📦 Outbound</h2>
+  <div class="chart-container">
+    <canvas id="outboundChart"></canvas>
+  </div>
+
+  <script>
+    new Chart(document.getElementById("outboundChart"), {
+      type: "doughnut",
+      data: {
+        labels: ["Retail", "Mayorista", "Exportación"],
+        datasets: [{
+          data: [250,400,150],
+          backgroundColor: ["#ffc107","#17a2b8","#dc3545"]
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  </script>
+{% endblock %}
+

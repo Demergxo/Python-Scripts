@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+  <h1 class="text-center mb-4">📦 GXO MSM Dashboard</h1>
+  <div class="list-group">
+    <a href="{% url 'produccion' %}" class="list-group-item list-group-item-action">Producción</a>
+    <a href="{% url 'inbound' %}" class="list-group-item list-group-item-action">Inbound</a>
+    <a href="{% url 'outbound' %}" class="list-group-item list-group-item-action">Outbound</a>
+  </div>
+{% endblock %}
