@@ -1,0 +1,2192 @@
+APC2: 28228, NOMBRE: JAVIER, APELLIDOS: ALBO CARDO, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 2
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 2
+APC2: 36733, NOMBRE: RAFAEL, APELLIDOS: ARREDONDO GARCIA, PUESTO: SUPERVISOR, ZONA: ZOOPLUS
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 4
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 45973, NOMBRE: M VAL, APELLIDOS: BARCHINO PLATA, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 3
+rand sel: 4
+rand sel: 2
+rand sel: 4
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 2
+APC2: 59619, NOMBRE: LETICIA, APELLIDOS: CALVO DE FRUTOS, PUESTO: OPS MANAGER, ZONA: ZOOPLUS
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 1
+rand sel: 2
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 55721, NOMBRE: ANA RUT, APELLIDOS: CAMPOMA MOYA , PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 1
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 45987, NOMBRE: NURIA, APELLIDOS: CASTILLO CATALINA, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 4
+rand sel: 1
+rand sel: 1
+rand sel: 2
+rand sel: 4
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 58617, NOMBRE: FCO DE ASIS, APELLIDOS: DE LA PEÑA PACHECO, PUESTO: OPS MANAGER, ZONA: NIKE
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 2
+rand sel: 2
+rand sel: 2
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28234, NOMBRE: JAIME JESUS, APELLIDOS: DOMINGUEZ MERCHAN, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 2
+rand sel: 2
+rand sel: 2
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 4
+APC2: 51003, NOMBRE: GEORGETA CARMEN, APELLIDOS: DUMITRESCU, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 3
+rand sel: 2
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 1
+rand sel: 2
+APC2: 51509, NOMBRE: SANDRA PATRICIA, APELLIDOS: FERNANDES RIBEIRO, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 1
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 46000, NOMBRE: DANIEL, APELLIDOS: GARCIA RIVERO, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 2
+rand sel: 2
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 1
+rand sel: 3
+APC2: 46586, NOMBRE: ISRAEL, APELLIDOS: GOMEZ CASTROVIEJO, PUESTO: KEY USER, ZONA: ZOOPLUS
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 2
+rand sel: 2
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 37139, NOMBRE: JOSE LUIS , APELLIDOS: GONZALEZ LUENGO, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 3
+rand sel: 2
+rand sel: 4
+rand sel: 3
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 49857, NOMBRE: ADRIAN, APELLIDOS: GREGORIO RUIZ, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 5
+rand sel: 6
+rand sel: 6
+rand sel: 6
+rand sel: 1
+rand sel: 6
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 28231, NOMBRE: IVAN, APELLIDOS: MANZANERO ESCRIBANO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 6
+rand sel: 2
+rand sel: 11
+rand sel: 4
+rand sel: 7
+rand sel: 13
+rand sel: 7
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 48269, NOMBRE: DANIEL, APELLIDOS: MERIÑO GALAN, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 2
+rand sel: 2
+rand sel: 4
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 28230, NOMBRE: FRANCISCO JOSE, APELLIDOS: PIZARROSO LOPEZ, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 1
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 1
+APC2: 28232, NOMBRE: JOSE, APELLIDOS: PLATA RODRIGUEZ, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 9
+rand sel: 1
+rand sel: 1
+rand sel: 2
+rand sel: 1
+rand sel: 12
+rand sel: 2
+rand sel: 2
+rand sel: 4
+rand sel: 10
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 28199, NOMBRE: FATIMA, APELLIDOS: QUINTERO CORBACHO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 6
+rand sel: 3
+rand sel: 1
+rand sel: 2
+rand sel: 8
+rand sel: 3
+rand sel: 7
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 30351, NOMBRE: YOHAN, APELLIDOS: RODRIGUEZ DA SILVA, PUESTO: STOCK MANAGER, ZONA: EMPTY SPACE
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 2
+rand sel: 2
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 28233, NOMBRE: MIGUEL ANGEL, APELLIDOS: SAEZ AGUDO, PUESTO: OPS MANAGER, ZONA: ELECTROLUX
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 2
+rand sel: 3
+rand sel: 1
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 50838, NOMBRE: ELENA , APELLIDOS: SANABRIA DEL PRADO, PUESTO: RRHH, ZONA: ELECTROLUX
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 2
+rand sel: 3
+rand sel: 2
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 37978, NOMBRE: OSCAR MANUEL, APELLIDOS: SANCHEZ MARTIN, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 3
+rand sel: 4
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 4
+APC2: 28224, NOMBRE: DARIO, APELLIDOS: TORBADO CAMPILLO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 2
+rand sel: 6
+rand sel: 4
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 28228, NOMBRE: JAVIER, APELLIDOS: ALBO CARDO, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 2
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 2
+rand sel: 4
+APC2: 36733, NOMBRE: RAFAEL, APELLIDOS: ARREDONDO GARCIA, PUESTO: SUPERVISOR, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 1
+rand sel: 2
+rand sel: 3
+rand sel: 3
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 1
+rand sel: 4
+APC2: 45973, NOMBRE: M VAL, APELLIDOS: BARCHINO PLATA, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 5
+rand sel: 4
+rand sel: 2
+rand sel: 6
+rand sel: 2
+rand sel: 1
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 59619, NOMBRE: LETICIA, APELLIDOS: CALVO DE FRUTOS, PUESTO: OPS MANAGER, ZONA: ZOOPLUS
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 3
+rand sel: 3
+rand sel: 1
+rand sel: 2
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 55721, NOMBRE: ANA RUT, APELLIDOS: CAMPOMA MOYA , PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 6
+rand sel: 3
+rand sel: 10
+rand sel: 3
+rand sel: 8
+rand sel: 3
+rand sel: 6
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 45987, NOMBRE: NURIA, APELLIDOS: CASTILLO CATALINA, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 1
+rand sel: 1
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 58617, NOMBRE: FCO DE ASIS, APELLIDOS: DE LA PEÑA PACHECO, PUESTO: OPS MANAGER, ZONA: NIKE
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 1
+rand sel: 4
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 28234, NOMBRE: JAIME JESUS, APELLIDOS: DOMINGUEZ MERCHAN, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 4
+rand sel: 2
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 4
+APC2: 51003, NOMBRE: GEORGETA CARMEN, APELLIDOS: DUMITRESCU, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 2
+rand sel: 5
+rand sel: 5
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 51509, NOMBRE: SANDRA PATRICIA, APELLIDOS: FERNANDES RIBEIRO, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 6
+rand sel: 3
+rand sel: 5
+rand sel: 5
+rand sel: 2
+rand sel: 2
+rand sel: 3
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 46000, NOMBRE: DANIEL, APELLIDOS: GARCIA RIVERO, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 2
+rand sel: 2
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 46586, NOMBRE: ISRAEL, APELLIDOS: GOMEZ CASTROVIEJO, PUESTO: KEY USER, ZONA: ZOOPLUS
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 1
+rand sel: 1
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 37139, NOMBRE: JOSE LUIS , APELLIDOS: GONZALEZ LUENGO, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 4
+rand sel: 3
+rand sel: 4
+rand sel: 3
+rand sel: 4
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 49857, NOMBRE: ADRIAN, APELLIDOS: GREGORIO RUIZ, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 3
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28231, NOMBRE: IVAN, APELLIDOS: MANZANERO ESCRIBANO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 1
+rand sel: 13
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 48269, NOMBRE: DANIEL, APELLIDOS: MERIÑO GALAN, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 9
+rand sel: 12
+rand sel: 8
+rand sel: 9
+rand sel: 1
+rand sel: 10
+rand sel: 8
+rand sel: 9
+rand sel: 5
+rand sel: 4
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 28230, NOMBRE: FRANCISCO JOSE, APELLIDOS: PIZARROSO LOPEZ, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 11
+rand sel: 8
+rand sel: 10
+rand sel: 12
+rand sel: 11
+rand sel: 9
+rand sel: 1
+rand sel: 11
+rand sel: 2
+rand sel: 1
+rand sel: 11
+rand sel: 10
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 28232, NOMBRE: JOSE, APELLIDOS: PLATA RODRIGUEZ, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 1
+rand sel: 2
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 28199, NOMBRE: FATIMA, APELLIDOS: QUINTERO CORBACHO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 13
+rand sel: 3
+rand sel: 12
+rand sel: 6
+rand sel: 3
+rand sel: 6
+rand sel: 9
+rand sel: 9
+rand sel: 10
+rand sel: 4
+rand sel: 9
+rand sel: 13
+rand sel: 5
+rand sel: 7
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 30351, NOMBRE: YOHAN, APELLIDOS: RODRIGUEZ DA SILVA, PUESTO: STOCK MANAGER, ZONA: EMPTY SPACE
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 1
+rand sel: 5
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 28233, NOMBRE: MIGUEL ANGEL, APELLIDOS: SAEZ AGUDO, PUESTO: OPS MANAGER, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 7
+rand sel: 10
+rand sel: 2
+rand sel: 8
+rand sel: 1
+rand sel: 12
+rand sel: 8
+rand sel: 11
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 50838, NOMBRE: ELENA , APELLIDOS: SANABRIA DEL PRADO, PUESTO: RRHH, ZONA: ELECTROLUX
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 2
+rand sel: 2
+rand sel: 2
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 37978, NOMBRE: OSCAR MANUEL, APELLIDOS: SANCHEZ MARTIN, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 3
+rand sel: 5
+rand sel: 3
+rand sel: 2
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 28224, NOMBRE: DARIO, APELLIDOS: TORBADO CAMPILLO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 2
+rand sel: 4
+rand sel: 3
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 28228, NOMBRE: JAVIER, APELLIDOS: ALBO CARDO, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 6
+rand sel: 1
+rand sel: 3
+rand sel: 1
+rand sel: 3
+rand sel: 4
+rand sel: 5
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 36733, NOMBRE: RAFAEL, APELLIDOS: ARREDONDO GARCIA, PUESTO: SUPERVISOR, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 2
+rand sel: 3
+rand sel: 4
+rand sel: 3
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 1
+rand sel: 1
+APC2: 45973, NOMBRE: M VAL, APELLIDOS: BARCHINO PLATA, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 2
+rand sel: 3
+rand sel: 4
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 59619, NOMBRE: LETICIA, APELLIDOS: CALVO DE FRUTOS, PUESTO: OPS MANAGER, ZONA: ZOOPLUS
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 5
+rand sel: 3
+rand sel: 3
+rand sel: 2
+rand sel: 5
+rand sel: 2
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 55721, NOMBRE: ANA RUT, APELLIDOS: CAMPOMA MOYA , PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 6
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 45987, NOMBRE: NURIA, APELLIDOS: CASTILLO CATALINA, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 1
+rand sel: 3
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 58617, NOMBRE: FCO DE ASIS, APELLIDOS: DE LA PEÑA PACHECO, PUESTO: OPS MANAGER, ZONA: NIKE
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 2
+rand sel: 3
+rand sel: 3
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 28234, NOMBRE: JAIME JESUS, APELLIDOS: DOMINGUEZ MERCHAN, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 1
+rand sel: 1
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 51003, NOMBRE: GEORGETA CARMEN, APELLIDOS: DUMITRESCU, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 2
+rand sel: 2
+rand sel: 3
+rand sel: 4
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 1
+APC2: 51509, NOMBRE: SANDRA PATRICIA, APELLIDOS: FERNANDES RIBEIRO, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 1
+rand sel: 3
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 46000, NOMBRE: DANIEL, APELLIDOS: GARCIA RIVERO, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 4
+rand sel: 5
+rand sel: 3
+rand sel: 3
+rand sel: 1
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 46586, NOMBRE: ISRAEL, APELLIDOS: GOMEZ CASTROVIEJO, PUESTO: KEY USER, ZONA: ZOOPLUS
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 4
+rand sel: 3
+rand sel: 1
+rand sel: 6
+rand sel: 3
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 37139, NOMBRE: JOSE LUIS , APELLIDOS: GONZALEZ LUENGO, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 3
+rand sel: 2
+rand sel: 4
+rand sel: 1
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 49857, NOMBRE: ADRIAN, APELLIDOS: GREGORIO RUIZ, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 1
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28231, NOMBRE: IVAN, APELLIDOS: MANZANERO ESCRIBANO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 4
+rand sel: 2
+rand sel: 3
+rand sel: 4
+rand sel: 3
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 48269, NOMBRE: DANIEL, APELLIDOS: MERIÑO GALAN, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 3
+rand sel: 3
+rand sel: 3
+rand sel: 2
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28230, NOMBRE: FRANCISCO JOSE, APELLIDOS: PIZARROSO LOPEZ, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 1
+rand sel: 1
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 28232, NOMBRE: JOSE, APELLIDOS: PLATA RODRIGUEZ, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 2
+rand sel: 3
+rand sel: 2
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28199, NOMBRE: FATIMA, APELLIDOS: QUINTERO CORBACHO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 1
+rand sel: 2
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 30351, NOMBRE: YOHAN, APELLIDOS: RODRIGUEZ DA SILVA, PUESTO: STOCK MANAGER, ZONA: EMPTY SPACE
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 2
+rand sel: 1
+rand sel: 3
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 28233, NOMBRE: MIGUEL ANGEL, APELLIDOS: SAEZ AGUDO, PUESTO: OPS MANAGER, ZONA: ELECTROLUX
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 4
+rand sel: 4
+rand sel: 6
+rand sel: 6
+rand sel: 6
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 50838, NOMBRE: ELENA , APELLIDOS: SANABRIA DEL PRADO, PUESTO: RRHH, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 7
+rand sel: 5
+rand sel: 7
+rand sel: 10
+rand sel: 8
+rand sel: 5
+rand sel: 11
+rand sel: 9
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 37978, NOMBRE: OSCAR MANUEL, APELLIDOS: SANCHEZ MARTIN, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 2
+rand sel: 2
+rand sel: 3
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 1
+rand sel: 4
+APC2: 28224, NOMBRE: DARIO, APELLIDOS: TORBADO CAMPILLO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 2
+rand sel: 4
+rand sel: 3
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 28228, NOMBRE: JAVIER, APELLIDOS: ALBO CARDO, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 1
+rand sel: 4
+rand sel: 4
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 3
+APC2: 36733, NOMBRE: RAFAEL, APELLIDOS: ARREDONDO GARCIA, PUESTO: SUPERVISOR, ZONA: ZOOPLUS
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 1
+rand sel: 4
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 45973, NOMBRE: M VAL, APELLIDOS: BARCHINO PLATA, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 1
+rand sel: 2
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 2
+APC2: 59619, NOMBRE: LETICIA, APELLIDOS: CALVO DE FRUTOS, PUESTO: OPS MANAGER, ZONA: ZOOPLUS
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 4
+rand sel: 1
+rand sel: 1
+rand sel: 3
+rand sel: 2
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 55721, NOMBRE: ANA RUT, APELLIDOS: CAMPOMA MOYA , PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 5
+rand sel: 1
+rand sel: 4
+rand sel: 6
+rand sel: 2
+rand sel: 6
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 45987, NOMBRE: NURIA, APELLIDOS: CASTILLO CATALINA, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 1
+rand sel: 5
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 58617, NOMBRE: FCO DE ASIS, APELLIDOS: DE LA PEÑA PACHECO, PUESTO: OPS MANAGER, ZONA: NIKE
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 1
+rand sel: 3
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28234, NOMBRE: JAIME JESUS, APELLIDOS: DOMINGUEZ MERCHAN, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 2
+rand sel: 1
+rand sel: 4
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 2
+APC2: 51003, NOMBRE: GEORGETA CARMEN, APELLIDOS: DUMITRESCU, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 4
+rand sel: 2
+rand sel: 2
+rand sel: 6
+rand sel: 6
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 51509, NOMBRE: SANDRA PATRICIA, APELLIDOS: FERNANDES RIBEIRO, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 2
+rand sel: 5
+rand sel: 1
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 46000, NOMBRE: DANIEL, APELLIDOS: GARCIA RIVERO, PUESTO: JEFE DE EQUIPO, ZONA: NIKE
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 4
+rand sel: 3
+rand sel: 12
+rand sel: 7
+rand sel: 7
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 46586, NOMBRE: ISRAEL, APELLIDOS: GOMEZ CASTROVIEJO, PUESTO: KEY USER, ZONA: ZOOPLUS
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 3
+rand sel: 4
+rand sel: 1
+rand sel: 1
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 1
+rand sel: 1
+APC2: 37139, NOMBRE: JOSE LUIS , APELLIDOS: GONZALEZ LUENGO, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 7
+Bucle quest: 6
+Zona: 7
+Bucle quest: 7
+entramos en funcion
+rand times: 1
+rand sel: 2
+Zona: 7
+Bucle quest: 9
+Zona: 7
+Bucle quest: 10
+Zona: 7
+Bucle quest: 11
+Zona: 7
+Bucle quest: 12
+Zona: 7
+Bucle quest: 13
+Zona: 7
+Bucle quest: 13
+APC2: 49857, NOMBRE: ADRIAN, APELLIDOS: GREGORIO RUIZ, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 2
+rand sel: 5
+rand sel: 5
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 28231, NOMBRE: IVAN, APELLIDOS: MANZANERO ESCRIBANO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 9
+Bucle quest: 6
+Zona: 9
+Bucle quest: 7
+Zona: 9
+Bucle quest: 8
+Zona: 9
+Bucle quest: 9
+entramos en funcion
+rand times: 5
+rand sel: 1
+rand sel: 6
+rand sel: 3
+rand sel: 6
+rand sel: 2
+Zona: 9
+Bucle quest: 11
+Zona: 9
+Bucle quest: 12
+Zona: 9
+Bucle quest: 13
+Zona: 9
+Bucle quest: 13
+APC2: 48269, NOMBRE: DANIEL, APELLIDOS: MERIÑO GALAN, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 1
+rand sel: 1
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28230, NOMBRE: FRANCISCO JOSE, APELLIDOS: PIZARROSO LOPEZ, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 3
+rand sel: 3
+rand sel: 3
+rand sel: 3
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28232, NOMBRE: JOSE, APELLIDOS: PLATA RODRIGUEZ, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 12
+rand sel: 3
+rand sel: 9
+rand sel: 8
+rand sel: 3
+rand sel: 1
+rand sel: 12
+rand sel: 4
+rand sel: 9
+rand sel: 1
+rand sel: 3
+rand sel: 8
+rand sel: 7
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 28199, NOMBRE: FATIMA, APELLIDOS: QUINTERO CORBACHO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 11
+Bucle quest: 6
+Zona: 11
+Bucle quest: 7
+Zona: 11
+Bucle quest: 8
+Zona: 11
+Bucle quest: 9
+Zona: 11
+Bucle quest: 10
+Zona: 11
+Bucle quest: 11
+entramos en funcion
+rand times: 5
+rand sel: 1
+rand sel: 5
+rand sel: 4
+rand sel: 5
+rand sel: 5
+Zona: 11
+Bucle quest: 13
+Zona: 11
+Bucle quest: 13
+APC2: 30351, NOMBRE: YOHAN, APELLIDOS: RODRIGUEZ DA SILVA, PUESTO: STOCK MANAGER, ZONA: EMPTY SPACE
+Zona: 12
+Bucle quest: 6
+Zona: 12
+Bucle quest: 7
+Zona: 12
+Bucle quest: 8
+Zona: 12
+Bucle quest: 9
+Zona: 12
+Bucle quest: 10
+Zona: 12
+Bucle quest: 11
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 1
+rand sel: 2
+Zona: 12
+Bucle quest: 12
+entramos en funcion
+rand times: 4
+rand sel: 4
+APC2: 28233, NOMBRE: MIGUEL ANGEL, APELLIDOS: SAEZ AGUDO, PUESTO: OPS MANAGER, ZONA: ELECTROLUX
+Zona: 8
+Bucle quest: 6
+Zona: 8
+Bucle quest: 7
+Zona: 8
+Bucle quest: 8
+entramos en funcion
+rand times: 3
+rand sel: 3
+rand sel: 5
+rand sel: 1
+Zona: 8
+Bucle quest: 10
+Zona: 8
+Bucle quest: 11
+Zona: 8
+Bucle quest: 12
+Zona: 8
+Bucle quest: 13
+Zona: 8
+Bucle quest: 13
+APC2: 50838, NOMBRE: ELENA , APELLIDOS: SANABRIA DEL PRADO, PUESTO: RRHH, ZONA: ELECTROLUX
+Zona: 10
+Bucle quest: 6
+Zona: 10
+Bucle quest: 7
+Zona: 10
+Bucle quest: 8
+Zona: 10
+Bucle quest: 9
+Zona: 10
+Bucle quest: 10
+entramos en funcion
+rand times: 4
+rand sel: 8
+rand sel: 11
+rand sel: 12
+rand sel: 6
+Zona: 10
+Bucle quest: 12
+Zona: 10
+Bucle quest: 13
+Zona: 10
+Bucle quest: 13
+APC2: 37978, NOMBRE: OSCAR MANUEL, APELLIDOS: SANCHEZ MARTIN, PUESTO: JEFE DE EQUIPO, ZONA: ZOOPLUS
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 2
+rand sel: 3
+rand sel: 1
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+APC2: 28224, NOMBRE: DARIO, APELLIDOS: TORBADO CAMPILLO, PUESTO: JEFE DE EQUIPO, ZONA: ELECTROLUX
+Zona: 6
+Bucle quest: 6
+entramos en funcion
+rand times: 1
+rand sel: 2
+Zona: 6
+Bucle quest: 8
+Zona: 6
+Bucle quest: 9
+Zona: 6
+Bucle quest: 10
+Zona: 6
+Bucle quest: 11
+Zona: 6
+Bucle quest: 12
+Zona: 6
+Bucle quest: 13
+Zona: 6
+Bucle quest: 13
+[+] TRABAJO FINALIZADO
+[+] CLOSE CONNECTION

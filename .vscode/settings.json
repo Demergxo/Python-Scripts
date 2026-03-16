@@ -1,0 +1,7 @@
+{
+    "search.showLineNumbers": true,
+    "debug.inlineValues": "on",
+    "notebook.lineNumbers": "on",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "basic"
+}

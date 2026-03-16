@@ -1,0 +1,2 @@
+[console_scripts]
+kbdtest = kbdtest.bin.__main__:main

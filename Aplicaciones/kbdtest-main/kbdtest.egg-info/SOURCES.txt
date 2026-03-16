@@ -1,0 +1,15 @@
+LICENSE
+README.md
+setup.py
+kbdtest/__init__.py
+kbdtest/interface.py
+kbdtest/tui.py
+kbdtest.egg-info/PKG-INFO
+kbdtest.egg-info/SOURCES.txt
+kbdtest.egg-info/dependency_links.txt
+kbdtest.egg-info/entry_points.txt
+kbdtest.egg-info/requires.txt
+kbdtest.egg-info/top_level.txt
+kbdtest.egg-info/zip-safe
+kbdtest/bin/__init__.py
+kbdtest/bin/__main__.py

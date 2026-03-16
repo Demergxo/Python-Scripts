@@ -1,0 +1,44 @@
+h2, p {
+    color: #555;
+    font: 13px/20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+a {
+    color: #648880;
+    }
+a:hover{
+    color: #293f50;
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: -.02em;
+    margin-bottom: 6px;
+}
+
+h2 a {
+    text-decoration: none;
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, .2);
+}
+
+.byline {
+    color: #8c8c8c;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: italic;
+}
+.intro {
+    text-indent: 15px;
+}
+
+.intro a {
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-transform: uppercase;
+}
+
+.nav {
+    text-align: center;
+    word-spacing: .5em;
+    
+}

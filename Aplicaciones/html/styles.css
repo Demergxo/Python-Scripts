@@ -1,0 +1,110 @@
+.hotdog p {
+    background: brown;
+    color: white;
+    width: 700px;
+    border: 2px solid black;
+}
+.hotdog p.mustard {
+    background: yellow;
+    color: black;
+    width: 500px;
+    border: 1px solid black;
+}
+
+/* 
+
+===================================================
+
+Botones
+
+===================================================
+
+*/
+.btn {
+    font-size: 16px;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0;
+}
+.btn-danger {
+    background: red;
+    border: 1px solid black;
+    padding: 10px 30px;
+}
+.btn-success {
+    background: green;
+}
+
+/* 
+
+=====================================================
+Display
+=======================================================
+
+*/
+
+.display-text{
+    display: inline-block;
+    border: 6px double black;
+    height: 100px;
+    margin: 20px;
+    padding: 20px;
+    width: 200px;
+}
+
+.border-forms{
+    border-radius: 15px 75px;
+    border: 6px double red;
+    margin: 30px;
+    padding: 20px;
+    width: 100px;
+}
+
+.border-two{
+    border-top-right-radius: 5px;
+    border: 6px solid blue;
+    margin: 30px;
+    padding: 20px;
+    width: 100px;
+}
+
+.content-box_tryout{
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: padding-box;
+    border: 2px solid green;
+    padding: 30px;
+    width: 95px;
+    
+}
+
+.container {
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 960px;
+}
+
+h1, h3, h5 {
+    margin-bottom: 22px;
+    letter-spacing: 2px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+p {
+    text-align: center;
+    text-indent: 20px;
+    text-shadow: 3px 6px 2px rgba(0, 0 ,0 .3);
+}
+
+.note {
+    text-decoration: underline;
+    text-transform: uppercase;
+    letter-spacing: -.2em;
+    word-spacing: .45em; 
+}
+
+.sample_text {
+    color: #555;
+    font: 13px/20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
