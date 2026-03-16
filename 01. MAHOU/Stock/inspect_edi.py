@@ -3,10 +3,10 @@ import base64
 import re
 
 # Carpeta donde están los archivos de entrada
-INPUT_FOLDER = r"./input"
+INPUT_FOLDER = r"C:\Users\jgmeras\OneDrive - GXO\Documents\01. Mahou\Try_edi"
 
 # Carpeta donde se guardarán los EDI decodificados
-OUTPUT_FOLDER = r"./edi_output"
+OUTPUT_FOLDER = r"C:\Users\jgmeras\OneDrive - GXO\Documents\01. Mahou\Try_edi\edi_output"
 
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
@@ -41,7 +41,7 @@ def decode_file(filepath):
         decoded = base64.b64decode(base64_data)
         return decoded
     except Exception as e:
-        print(f"Error decodificando {filepath}: {e}")
+        print(f"Error decodificando {filepath}: \n{e}")
         return None
 
 
@@ -52,9 +52,10 @@ def extract_segments(edi_text):
     results = {}
 
     patterns = {
-        "DTM_264": r"DTM\+264:([^']+)",
-        "DTM_267": r"DTM\+267:([^']+)",
-        "RFF_FCP": r"RFF\+FCP:([^']+)"
+        "BGM+80E": r"BGM\+80E:([^']+)",
+        "DTM+264": r"DTM\+264:([^']+)",
+        "DTM+267": r"DTM\+267:([^']+)",
+        "RFF+FCP": r"RFF\+FCP:([^']+)"
     }
 
     for key, pattern in patterns.items():
