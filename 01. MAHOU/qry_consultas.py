@@ -3,10 +3,10 @@ import pandas as pd
 from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "Usuarios"
+ddbb_name = "vDocumentos"
 
-fecha_inicio = '2026-03-02'
-fecha_fin = '2026-03-10'
+fecha_inicio = '2026-03-09'
+fecha_fin = '2026-03-22'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -24,50 +24,54 @@ query = text(f"""
         *
     FROM
         {ddbb_name}
-    
-       
+    WHERE 
+        ID_Cliente = 944
+        AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
+        AND CodigoTipoDocumento = 'ALB'
+        AND ID_Almacen = 129
+        
                         
 """)
 
-query2 = text("""
+# query2 = text("""
               
               
-SELECT
-    CONCAT(
-        COALESCE(ZonaUbicacion, ''),
-        '-', COALESCE(PasilloUbicacion, ''),
-        '-', COALESCE(HuecoUbicacion, ''),
-        '-', COALESCE(NivelUbicacion, '')
-    ) AS Ubicacion,
-    CodigoProdClte AS Referencia,
-    COUNT(SSCCPalet) AS Cantidad,
-    CAST(GETDATE() AS DATE) AS FechaConsulta
-FROM vExtraccionesCambioUbicacionAlbaran
-WHERE
-    ID_Cliente = 944
-    AND ID_Almacen = 129
-    AND ID_Deposito = 258
-    AND TipoMvtoPalet = 'S'
-    AND CantidadMvtoPalet <> 0
-    AND LTRIM(RTRIM(CodigoProdClte)) NOT IN ('110','186')
-    AND ZonaUbicacion IN ('MA', 'BA')
-    AND CodigoEstadoProd = 'B'
-    AND ID_Extraccion IS NOT NULL
-    AND LTRIM(RTRIM(ID_Extraccion)) <> ''
-GROUP BY
-    CONCAT(
-        COALESCE(ZonaUbicacion, ''),
-        '-', COALESCE(PasilloUbicacion, ''),
-        '-', COALESCE(HuecoUbicacion, ''),
-        '-', COALESCE(NivelUbicacion, '')
-    ),
-    CodigoProdClte
+# SELECT
+#     CONCAT(
+#         COALESCE(ZonaUbicacion, ''),
+#         '-', COALESCE(PasilloUbicacion, ''),
+#         '-', COALESCE(HuecoUbicacion, ''),
+#         '-', COALESCE(NivelUbicacion, '')
+#     ) AS Ubicacion,
+#     CodigoProdClte AS Referencia,
+#     COUNT(SSCCPalet) AS Cantidad,
+#     CAST(GETDATE() AS DATE) AS FechaConsulta
+# FROM vExtraccionesCambioUbicacionAlbaran
+# WHERE
+#     ID_Cliente = 944
+#     AND ID_Almacen = 129
+#     AND ID_Deposito = 258
+#     AND TipoMvtoPalet = 'S'
+#     AND CantidadMvtoPalet <> 0
+#     AND LTRIM(RTRIM(CodigoProdClte)) NOT IN ('110','186')
+#     AND ZonaUbicacion IN ('MA', 'BA')
+#     AND CodigoEstadoProd = 'B'
+#     AND ID_Extraccion IS NOT NULL
+#     AND LTRIM(RTRIM(ID_Extraccion)) <> ''
+# GROUP BY
+#     CONCAT(
+#         COALESCE(ZonaUbicacion, ''),
+#         '-', COALESCE(PasilloUbicacion, ''),
+#         '-', COALESCE(HuecoUbicacion, ''),
+#         '-', COALESCE(NivelUbicacion, '')
+#     ),
+#     CodigoProdClte
 
               
               
               
               
-              """)
+#               """)
 
  
 

@@ -52,10 +52,10 @@ def extract_segments(edi_text):
     results = {}
 
     patterns = {
-        "BGM+80E": r"BGM\+80E:([^']+)",
-        "DTM+264": r"DTM\+264:([^']+)",
-        "DTM+267": r"DTM\+267:([^']+)",
-        "RFF+FCP": r"RFF\+FCP:([^']+)"
+        "BGM+80E Nº Pedido": r"BGM\+80E:([^']+)",
+        "DTM+264 FCP Mayor o igual": r"DTM\+264:([^']+)",
+        "DTM+267 FCP exactamente igual": r"DTM\+267:([^']+)",
+        "RFF+FCP FCP según porcentaje vida útil": r"RFF\+FCP:([^']+)"
     }
 
     for key, pattern in patterns.items():
