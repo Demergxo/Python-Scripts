@@ -1,6 +1,7 @@
 import os
 import base64
 import re
+from datetime import datetime
 
 # Carpeta donde están los archivos de entrada
 INPUT_FOLDER = r"C:\Users\jgmeras\OneDrive - GXO\Documents\01. Mahou\Try_edi"
@@ -52,16 +53,23 @@ def extract_segments(edi_text):
     results = {}
 
     patterns = {
-        "BGM+80E Nº Pedido": r"BGM\+80E:([^']+)",
-        "DTM+264 FCP Mayor o igual": r"DTM\+264:([^']+)",
-        "DTM+267 FCP exactamente igual": r"DTM\+267:([^']+)",
+        "BGM+80E Nº Pedido":r"BGM\+80E:[^+]*\+([^+]+)",
+        "DTM+264 FCP Mayor o igual": r"DTM\+264:(\d{8})",
+        "DTM+267 FCP exactamente igual": r"DTM\+267:(\d{8})",
         "RFF+FCP FCP según porcentaje vida útil": r"RFF\+FCP:([^']+)"
     }
 
     for key, pattern in patterns.items():
         match = re.search(pattern, edi_text)
-        results[key] = match.group(1) if match else None
+        if match:
+            result = match.group(1)
 
+            if "DTM" in key:
+                result = datetime.strptime(result, "%Y%m%d").strftime("%Y-%m-%d")
+
+        else:
+            result = None
+        results[key] = result
     return results
 
 
