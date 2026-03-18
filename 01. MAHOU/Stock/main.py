@@ -1,4 +1,5 @@
 import sys
+#pip install --target=C:\PyLib Pyqt6
 sys.path.append(r"C:\PyLib")
 import time
 import hashlib
