@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: Support
+  namespace: MSM
+spec:
+  rules:
+  - host: msm.support.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: Support
+            port:
+              number: 80

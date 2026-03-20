@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: msm-config
+  namespace: MSM
+data:
+  DJANGO_SETTINGS_MODULE: "config.settings.production"
+  APP_ENV: "production"
+  CLIENT_NAME: "MSM"
+  LOG_LEVEL: "info"
+  
