@@ -3,6 +3,9 @@ import pandas as pd
 import time
 import os
 
+fecha_inicio = '2026-03-16'
+fecha_fin = '2026-03-20'
+
 path = os.getcwd()
 DB_FILE = f"{path}\\apoyo.db"
 
@@ -263,4 +266,4 @@ def consulta_pedidos(fecha_inicio, fecha_fin):
     print("OK ->", nombre_archivo)
 
 if __name__ == "__main__":
-    consulta_pedidos("2026-01-01", "2026-02-08")
+    consulta_pedidos(fecha_inicio, fecha_fin)

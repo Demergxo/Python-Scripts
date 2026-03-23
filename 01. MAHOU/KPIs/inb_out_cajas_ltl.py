@@ -12,8 +12,8 @@ archive = f"C:\\Users\\{usuario}\\OneDrive - GXO\\Escritorio\\KPIS Transporte MS
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_inb_out_cajas_ltl"
-fecha_inicio = '2026-03-09'
-fecha_fin = '2026-03-15'
+fecha_inicio = '2026-03-16'
+fecha_fin = '2026-03-20'
 
 def chunks(lst, n):
     for i in range(0, len(lst), n):
@@ -21,7 +21,7 @@ def chunks(lst, n):
 
 def leer_excel(archivo):
     df = pd.read_excel(archivo,
-    usecols = ["Fecha Expedición", "Tipo Doc", "Nº Documento", "On Time", "Incidencia", "Cantidad de Artículos", "Responsable", "Observaciones"]
+    usecols = ["Fecha Expedición", "Tipo Doc", "Nº Documento", "On Time", "Incidencia", "Cantidad de Artículos", "Motivo retrasos", "Responsable"]
     )
     #df_filtrado = df[df["Tipo Doc"] != "REC"]
     df_filtrado = df[~df["Tipo Doc"].isin(["REC", "DEV"])]
@@ -206,8 +206,9 @@ def qry_inb_out_ltl():
             "PesoFiege": "sum",
             "Cantidad de Artículos": "first",
             "Incidencia": "first",
+            "Motivo retrasos": "first",
             "Responsable": "first",
-            "Observaciones": "first"
+            
         })    )
     
 

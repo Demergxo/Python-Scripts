@@ -3,10 +3,10 @@ import pandas as pd
 from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "vDocumentos"
+ddbb_name = "Documentos"
 
 fecha_inicio = '2026-03-09'
-fecha_fin = '2026-03-22'
+fecha_fin = '2026-03-23'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -27,14 +27,14 @@ query = text(f"""
     WHERE 
         ID_Cliente = 944
         AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
-        AND CodigoTipoDocumento = 'ALB'
+        
         AND ID_Almacen = 129
         
                         
 """)
 
 # query2 = text("""
-              
+   #          
               
 # SELECT
 #     CONCAT(
