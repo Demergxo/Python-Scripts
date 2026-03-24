@@ -59,7 +59,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
     query_palets = text(f"""
         SELECT
             ID_Doc,
-            CEILING(CAST(PesoBrutoProdClte AS FLOAT)) AS Peso, CodigoProdClte, CantidadLineaDoc
+            CEILING(CAST(PesoBrutoProdClte AS FLOAT)) AS Peso, CodigoProdClte, CantidadLineaDoc, CajasPaletProdClte
 
         FROM
             vLineasDocumentosConsulta
@@ -81,9 +81,13 @@ def qry_inb_out(fecha_inicio, fecha_fin):
     # Solo un registro por ID_Doc con el sumatorio de peso
     df_palets_agg = (
         df_palets
-        .groupby("ID_Doc", as_index=False)["Peso"]
-        .sum()
-    )
+        .groupby("ID_Doc", as_index=False)
+        .agg({
+            "Peso": "sum",
+            "CantidadLineaDoc": "first",
+            "CajasPaletProdClte": "first"  
+        })
+)
 
     #HACEMOS MERGE DE LAS DOS CONSULTAS
 

@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "Documentos"
+ddbb_name = "vLineasDocumentosConsulta"
 
 fecha_inicio = '2026-03-09'
 fecha_fin = '2026-03-23'
@@ -25,12 +25,12 @@ query = text(f"""
     FROM
         {ddbb_name}
     WHERE 
-        ID_Cliente = 944
-        AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
-        
-        AND ID_Almacen = 129
-        
-                        
+        WHERE
+            ID_Cliente = 944
+            AND ID_Almacen = 129
+            AND CodigoDeposito = '000'
+            AND TipoMovimientoLineaDoc = 'S'
+            AND CONVERT(date, FechaProcesoEstado) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
 """)
 
 # query2 = text("""
