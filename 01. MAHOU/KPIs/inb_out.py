@@ -4,8 +4,8 @@ from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_inb_out"
-fecha_inicio = '2026-03-01'
-fecha_fin = '2026-03-17'
+fecha_inicio = '2026-03-20'
+fecha_fin = '2026-03-24'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -32,7 +32,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
             AND ID_Almacen = 129
             AND (CodigoTipoDocumento = 'RS' OR CodigoTipoDocumento = 'ALB')
             AND CodigoTipoEstado IN ('040', '080', '085', '140', '130')
-            AND CONVERT(date, FechaProcesoDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin);
+            AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin);
 
     """)
 

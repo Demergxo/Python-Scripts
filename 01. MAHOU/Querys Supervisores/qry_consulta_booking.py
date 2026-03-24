@@ -113,19 +113,41 @@ query_lineas_out = text(f"""
 
 params_docs = {f"id{i}": v for i, v in enumerate(list_doc)}
 
-
+#segunda tanda de consultas
 with engine.connect() as conn:
     df_lineas_in = pd.read_sql(query_lineas_in, conn, params={"ids": list_ids}) #type:ignore
     df_lineas_out = pd.read_sql(query_lineas_out, conn, params=params_docs)
 df_lineas_in["Pedido MSM"] = df_lineas_in["Pedido MSM"].str.strip()
 
+
+#unimos y eliminamos
 df = df.merge(df_lineas_in, on="Pedido MSM", how="left")
 df = df.merge(df_lineas_out, left_on="ID_Doc", right_on="ID_Doc", how="left")
+
 df = df.drop(columns=["ID_Doc"])
+
+#formateamos el dataframe
+df["Referencia"] = df["Referencia_x"].combine_first(df["Referencia_y"])
+df["Palets"] = df["Palets"].combine_first(df["CantidadTeorica"])
+df = df.drop(columns=["Referencia_x", "Referencia_y", "CantidadTeorica"])
+df["Referencia"] = df["Referencia"].fillna("").astype(str)
+df["Referencia"] = df["Referencia"].str.strip().str.zfill(3)
+
+#eliminamos 004->palet chep y 012->medio display
+df = df[~df["Referencia"].isin(["004", "012"])]
+
+#unimos referencias en un solo campo y sumamos palets
+df_final = df.groupby("Pedido MSM", as_index=False).agg({
+    "Referencia": lambda x: ",".join(sorted(set(i for i in x if i))),
+    "Palets": "sum",
+    "Codigo Doc": "first",
+    "Observaciones": "first",
+    "Fecha Carga": "first"
+})
 
 # --- EXPORTAR ---
 nombre_archivo = f"booking_{date}.xlsx"
-df.to_excel(nombre_archivo, index=False)
+df_final.to_excel(nombre_archivo, index=False)
 
 print(f"✅ Archivo generado correctamente: {nombre_archivo}")
 
