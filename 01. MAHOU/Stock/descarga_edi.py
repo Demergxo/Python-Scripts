@@ -5,7 +5,7 @@ import base64
 
 import pandas as pd
 import requests
-import openpyxl
+#import openpyxl
 from sqlalchemy import create_engine, text
 from datetime import datetime
 
@@ -245,7 +245,6 @@ def extract_base64(lines):
     base64_data = "".join(lines[start_index:]).strip()
     return base64_data
 
-
 def decode_file(filepath):
     with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
         lines = f.readlines()
@@ -258,7 +257,6 @@ def decode_file(filepath):
     except Exception as e:
         print(f"Error decodificando {filepath}: \n{e}")
         return None
-
 
 def extract_segments(edi_text):
     """
@@ -319,5 +317,9 @@ def process_files(input_folder, output_folder):
         for k, v in segments.items():
             print(f"  {k}: {v}")
 
-        print("-" * 40)                          
+        print("-" * 40)
+
+if __name__ == "__main__":
+    descargar_edi()
+    process_files(RAW_DIR, "parsed_edis")
     
