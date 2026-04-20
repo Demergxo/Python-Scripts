@@ -385,7 +385,30 @@ def process_files(input_folder, output_file):
 
     print(f"\n✅ Excel generado: {output_file}")
 
+import os
+
+def limpiar_raw_files(folder_path):
+    if not os.path.exists(folder_path):
+        print(f"La carpeta no existe: {folder_path}")
+        return
+
+    archivos_eliminados = 0
+
+    for filename in os.listdir(folder_path):
+        filepath = os.path.join(folder_path, filename)
+
+        if os.path.isfile(filepath):
+            try:
+                os.remove(filepath)
+                archivos_eliminados += 1
+            except Exception as e:
+                print(f"Error eliminando {filename}: {e}")
+
+    print(f"Archivos eliminados: {archivos_eliminados}")
+
+
 if __name__ == "__main__":
+    limpiar_raw_files(RAW_DIR)
     descargar_edi()
     process_files(RAW_DIR, "parsed_edis")
     
