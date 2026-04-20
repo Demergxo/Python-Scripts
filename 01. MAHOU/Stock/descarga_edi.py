@@ -243,7 +243,6 @@ def descargar_edi():
     finally:
         session.close()
 
-
 def extract_base64(lines):
     """
     Encuentra dónde empieza el contenido base64.
@@ -323,7 +322,6 @@ def extract_segments(edi_text):
         result["lineas"].append(linea)
 
     return result
-
 
 def process_files(input_folder, output_file):
 
