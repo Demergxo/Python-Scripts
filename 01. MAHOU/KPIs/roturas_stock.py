@@ -1,12 +1,13 @@
 from sqlalchemy import create_engine, text#type:ignore
 import pandas as pd
 from datetime import datetime
+import os
 
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_roturas_stock"
 fecha_inicio = '2026-03-01'
-fecha_fin = '2026-03-08' 
+fecha_fin = '2026-03-23' 
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -15,6 +16,9 @@ def hora():
 def qry_inb_out(fecha_inicio, fecha_fin):
     date = datetime.now().strftime("%Y%m%d%H%M%S")
     ddbb_name = "KPIS_roturas_stock"
+
+    path = os.getcwd()
+    DB_FILE = f"{path}\\apoyo.db"
 
     print(f"Hora de inicio: {hora()}")
 
@@ -59,7 +63,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
     query_palets = text(f"""
         SELECT
             ID_Doc,
-            CEILING(CAST(PesoBrutoProdClte AS FLOAT)) AS Peso, CodigoProdClte, CantidadLineaDoc, CajasPaletProdClte
+            CEILING(CAST(PesoBrutoProdClte AS FLOAT)) AS Peso, CodigoProdClte AS Referencia, CantidadLineaDoc
 
         FROM
             vLineasDocumentosConsulta
@@ -83,9 +87,10 @@ def qry_inb_out(fecha_inicio, fecha_fin):
         df_palets
         .groupby("ID_Doc", as_index=False)
         .agg({
+            "Referencia": "first",
             "Peso": "sum",
-            "CantidadLineaDoc": "first",
-            "CajasPaletProdClte": "first"  
+            "CantidadLineaDoc": "sum",
+            
         })
 )
 
