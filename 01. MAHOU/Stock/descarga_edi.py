@@ -1,7 +1,8 @@
 import os
 import re
-from urllib.parse import quote
+
 import base64
+from alive_progress import alive_bar
 
 import pandas as pd
 import requests
@@ -9,7 +10,9 @@ import requests
 from sqlalchemy import create_engine, text
 from datetime import datetime
 
-RAW_DIR = "raw_files"
+base_path = os.getcwd()
+
+RAW_DIR = base_path+r"\raw_files"
 
 def leer_excel(ruta_archivo, hoja=0):
     """
@@ -46,11 +49,12 @@ def generar_nombres_unicos(filepath):
     return filepath
 
 def generar_df_trabajo():
+    user = os.getenv("USERNAME")
 
     engine = create_engine("mssql+pyodbc://@XGA_PROD")
     #Leer archivo excel
    
-    df = leer_excel(r"C:\Users\jgmeras\OneDrive - GXO\Escritorio\Archivo_Subida_albaranes.xlsx", 1)
+    df = leer_excel(f"C:\\Users\\{user}\\OneDrive - GXO\\Escritorio\\Archivo_muestra.xlsx")
 
     if df is None or df.empty:
         print("El archivo está vacío o no se pudo leer.")
@@ -79,7 +83,7 @@ def generar_df_trabajo():
 
     with engine.connect() as conn:
         df_2 = pd.read_sql(query_iddoc, conn, params=params)
-    print(df_2)
+    #print(df_2)
 
     if df_2.empty:
         print("No se encontraron registros.")
@@ -95,7 +99,7 @@ def generar_df_trabajo():
     .unique()
     .tolist()
     )
-    print(ids_alb)
+    #print(ids_alb)
 
     placeholders, params = obtener_placeholders(ids_alb)
 
@@ -112,12 +116,12 @@ def generar_df_trabajo():
     
     with engine.connect() as conn:
         df_3 = pd.read_sql(query_subestados, conn, params=params)
-    print(df_3)
+    #print(df_3)
 
     df_23 = df_2.merge(df_3, on="ID_Doc", how="inner")
 
     id_subest =df_23["ID_SubEstadosDocumentos"].dropna().astype(str).unique().tolist()
-    print(id_subest)
+    #print(id_subest)
 
     placeholders, params = obtener_placeholders(id_subest)
 
@@ -133,25 +137,33 @@ def generar_df_trabajo():
     
     with engine.connect() as conn:
         df_4 = pd.read_sql(query_ficheros, conn, params=params)
-    print(df_4)
+    #print(df_4)
 
     df_234 =df_23.merge(df_4, on="ID_SubEstadosDocumentos", how="inner")
-    print(df_234)
-    df_234.to_csv("prueba.csv", index=False, sep=";", encoding="utf-8")
+    #print(df_234)
+    #df_234.to_csv("prueba.csv", index=False, sep=";", encoding="utf-8")
     rutas =df_234["NombreFicheroBackupSubEstadoTransmision"].dropna().astype(str).unique().tolist()
     return rutas
 
-def extraer_nombre_fichero(ruta, content_disposition='"'):
+def extraer_nombre_fichero(ruta, content_disposition=''):
+
+    # 1. Intentar desde header
     if "filename=" in content_disposition:
         raw_filename = content_disposition.split("filename=")[-1].strip().strip('"')
-        return os.path.basename(raw_filename).replace("\\", "_")
-    
-    nombre = os.path.basename(ruta.replace("\\", "/"))
-    if nombre:
-        return nombre
-    
-    m = re.search(r"I1084[^\\]+$", ruta)
-    return m.group(0) if m else "fichero_descagado.edi"
+        nombre = os.path.basename(raw_filename)
+
+    else:
+        # 2. Sacar desde ruta
+        nombre = os.path.basename(ruta.replace("\\", "/"))
+
+    # 3. Validar que empiece por I1084
+    if not nombre.startswith("I1084"):
+        return None  # 👈 clave para filtrar
+
+    # 4. Limpiar caracteres problemáticos
+    nombre = nombre.replace("\\", "_")
+
+    return nombre
 
 def descargar_edi():
     user = "JGMERAS"
@@ -159,7 +171,11 @@ def descargar_edi():
 
     base_url = "http://10.19.16.125"
     download_path = "/fga/MtoDocumentosTr/DescargaFicheroSubestado"
-    os.makedirs(RAW_DIR, exist_ok=True)
+
+    if not os.path.exists(RAW_DIR):
+        print(f"Creando carpeta: {RAW_DIR}")
+        os.makedirs(RAW_DIR, exist_ok=True)
+
     ruta_list = generar_df_trabajo()
     if not ruta_list: #type:ignore
         print("No hay rutas para procesar.")
@@ -173,7 +189,7 @@ def descargar_edi():
     try:
         #hacemos login con la primera opción
         primera_ruta = ruta_list[0]
-        primera_url = f"{base_url}{download_path}?ruta={quote(primera_ruta)}"#type:ignore
+        primera_url = f"{base_url}{download_path}?nombrefichero={primera_ruta}"
 
         r1 = session.get(primera_url, allow_redirects=True, timeout=30)
 
@@ -196,35 +212,37 @@ def descargar_edi():
 
         for ruta in ruta_list:
             try:
-                ruta_codificada = quote(ruta) #type:ignore
-                url = f"{base_url}{download_path}?ruta={ruta_codificada}"
+                ruta_codificada = (ruta) #type:ignore
+                url = f"{base_url}{download_path}?nombrefichero={ruta_codificada}"
 
                 r3 = session.get(url, stream=True, timeout=60)
-                print("Descarga: ",r3.status_code, url)
+                #print("Descarga: ",r3.status_code, url)
                 content_type = (r3.headers.get("Content-Type") or "").lower()
                 content_disposition = r3.headers.get("Content_Disposition", '"')
 
                 if r3.status_code == 200:
                     filename = extraer_nombre_fichero(ruta, content_disposition)
-                    print("Guardando como: ",filename)
+                    #print("Guardando como: ",filename)
                     
-                    filepath = os.path.join(RAW_DIR, filename)
+                    filepath = os.path.join(RAW_DIR, filename) #type:ignore
                     filepath = generar_nombres_unicos(filepath)
 
                     with open(filepath, "wb") as f:
                         for chunk in r3.iter_content(chunk_size=8192):
                             if chunk:
                                 f.write(chunk)
-                    print("Archivo guardado")
+                    #print("Archivo guardado")
                 else:
                     with open("error_response.html", "w", encoding="utf-8") as f:
                             f.write(r3.text)
 
-                            print("Descarga erronea, se obtuvo HTML en vez del archivo")
+                            #print("Descarga erronea, se obtuvo HTML en vez del archivo")
             except Exception as e:
-                print(f"Error descargando {ruta}: {e}")
+                continue
+                #print(f"Error descargando {ruta}: {e}")
     finally:
         session.close()
+
 
 def extract_base64(lines):
     """
@@ -259,65 +277,115 @@ def decode_file(filepath):
         return None
 
 def extract_segments(edi_text):
-    """
-    Busca los segmentos requeridos dentro del EDI
-    """
-    results = {}
-
-    patterns = {
-        "BGM+80E Nº Pedido":r"BGM\+80E:[^+]*\+([^+]+)",
-        "DTM+264 FCP Mayor o igual": r"DTM\+264:(\d{8})",
-        "DTM+267 FCP exactamente igual": r"DTM\+267:(\d{8})",
-        "RFF+FCP FCP según porcentaje vida útil": r"RFF\+FCP:([^']+)"
+    result = {
+        "pedido": None,
+        "lineas": []
     }
 
-    for key, pattern in patterns.items():
-        match = re.search(pattern, edi_text)
-        if match:
-            result = match.group(1)
+    # 1. Pedido (cabecera)
+    match = re.search(r"BGM\+80E:[^+]*\+([^+]+)", edi_text)
+    if match:
+        result["pedido"] = match.group(1)
 
-            if "DTM" in key:
-                result = datetime.strptime(result, "%Y%m%d").strftime("%Y-%m-%d")
+    # 2. Dividir por líneas (LIN)
+    bloques = re.split(r"(?=LIN\+)", edi_text)
 
-        else:
-            result = None
-        results[key] = result
-    return results
-
-
-def process_files(input_folder, output_folder):
-
-    for filename in os.listdir(input_folder):
-
-        filepath = os.path.join(input_folder, filename)
-
-        if not os.path.isfile(filepath):
+    for bloque in bloques:
+        if not bloque.startswith("LIN"):
             continue
 
-        print(f"Procesando: {filename}")
+        linea = {
+            "referencia": None,
+            "DTM+264": None,
+            "DTM+267": None,
+            "RFF+FCP": None
+        }
 
-        decoded = decode_file(filepath)
+        # 3. Referencia (PIA)
+        pia = re.search(r"PIA\+1\+([^:]+):SA", bloque)
+        if pia:
+            linea["referencia"] = pia.group(1) #type:ignore
 
-        if decoded is None:
-            continue
+        # 4. Fechas
+        dtm264 = re.search(r"DTM\+264:(\d{8})", bloque)
+        if dtm264:
+            linea["DTM+264"] = datetime.strptime(dtm264.group(1), "%Y%m%d").strftime("%Y-%m-%d") #type:ignore
 
-        edi_text = decoded.decode("utf-8", errors="ignore")
+        dtm267 = re.search(r"DTM\+267:(\d{8})", bloque)
+        if dtm267:
+            linea["DTM+267"] = datetime.strptime(dtm267.group(1), "%Y%m%d").strftime("%Y-%m-%d") #type:ignore
 
-        # Guardar EDI
-        edi_name = os.path.splitext(filename)[0] + ".edi"
-        edi_path = os.path.join(output_folder, edi_name)
+        # 5. RFF
+        rff = re.search(r"RFF\+FCP:([^']+)", bloque)
+        if rff:
+            linea["RFF+FCP"] = rff.group(1) #type:ignore
 
-        with open(edi_path, "w", encoding="utf-8") as f:
-            f.write(edi_text)
+        result["lineas"].append(linea)
 
-        # Extraer segmentos
-        segments = extract_segments(edi_text)
+    return result
 
-        print("Segmentos encontrados:")
-        for k, v in segments.items():
-            print(f"  {k}: {v}")
 
-        print("-" * 40)
+def process_files(input_folder, output_file):
+
+    all_rows = []
+    date = datetime.now().strftime("%Y%m%d%H%M%S")
+    output_file = f"{output_file}_{date}.xlsx"
+    files = [f for f in os.listdir(input_folder) 
+             if os.path.isfile(os.path.join(input_folder, f))]
+
+    total_files = len(files)
+
+    with alive_bar(total_files, title="Procesando archivos") as bar:
+
+
+        for filename in os.listdir(input_folder):
+
+            filepath = os.path.join(input_folder, filename)
+
+            if not os.path.isfile(filepath):
+                continue
+
+            #print(f"Procesando: {filename}")
+
+            decoded = decode_file(filepath)
+
+            if decoded is None:
+                continue
+
+            edi_text = decoded.decode("utf-8", errors="ignore")
+
+            # 👇 Usamos la función estructurada nueva
+            data = extract_segments(edi_text)
+
+            pedido = data["pedido"]
+
+            for linea in data["lineas"]:
+                row = {
+                    "Pedido": pedido,
+                    "Referencia": linea["referencia"],
+                    "FCP Mayor o igual": linea["DTM+264"],
+                    "FCP Exactamente igual": linea["DTM+267"],
+                    "FCP según % vida útil": linea["RFF+FCP"],
+                    "Archivo": filename  # opcional, muy útil para trazabilidad
+                }
+                all_rows.append(row)
+            bar()
+
+    # 🔹 Crear DataFrame
+    df = pd.DataFrame(all_rows)
+
+    # 🔹 Guardar en un único Excel
+    with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="Datos")
+
+        worksheet = writer.sheets["Datos"]
+
+        # Auto ancho columnas
+        for col in worksheet.columns:
+            max_length = max(len(str(cell.value)) if cell.value else 0 for cell in col)
+            worksheet.column_dimensions[col[0].column_letter].width = max_length + 2
+
+    print(f"\n✅ Excel generado: {output_file}")
 
 if __name__ == "__main__":
     descargar_edi()
