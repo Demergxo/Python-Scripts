@@ -385,8 +385,6 @@ def process_files(input_folder, output_file):
 
     print(f"\n✅ Excel generado: {output_file}")
 
-import os
-
 def limpiar_raw_files(folder_path):
     if not os.path.exists(folder_path):
         print(f"La carpeta no existe: {folder_path}")
@@ -405,7 +403,6 @@ def limpiar_raw_files(folder_path):
                 print(f"Error eliminando {filename}: {e}")
 
     print(f"Archivos eliminados: {archivos_eliminados}")
-
 
 if __name__ == "__main__":
     limpiar_raw_files(RAW_DIR)
