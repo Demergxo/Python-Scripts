@@ -141,7 +141,7 @@ def generar_df_trabajo():
 
     df_234 =df_23.merge(df_4, on="ID_SubEstadosDocumentos", how="inner")
     #print(df_234)
-    #df_234.to_csv("prueba.csv", index=False, sep=";", encoding="utf-8")
+    #df_234.to_csv("prueba1.csv", index=False, sep=";", encoding="utf-8")
     rutas =df_234["NombreFicheroBackupSubEstadoTransmision"].dropna().astype(str).unique().tolist()
     return rutas
 
@@ -238,8 +238,12 @@ def descargar_edi():
 
                             #print("Descarga erronea, se obtuvo HTML en vez del archivo")
             except Exception as e:
+                print("Error descargando ruta")
+                print(ruta)
+                print(type(e).__name__, e)
                 continue
-                #print(f"Error descargando {ruta}: {e}")
+                
+
     finally:
         session.close()
 
@@ -263,18 +267,67 @@ def extract_base64(lines):
     return base64_data
 
 def decode_file(filepath):
-    with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
-        lines = f.readlines()
+    
+    with open(filepath, "rb") as f:
+        raw = f.read()
 
-    base64_data = extract_base64(lines)
+    # 1) intentar leer como texto directamente
+    text = raw.decode("utf-8", errors="ignore")
 
-    try:
-        decoded = base64.b64decode(base64_data)
-        return decoded
-    except Exception as e:
-        print(f"Error decodificando {filepath}: \n{e}")
+    # Si ya parece EDI, no decodificamos
+    if "UNB" in text or "UNH" in text or "LIN+" in text:
+        return text
+
+    # 2) si no, intentar decodificar base64
+    lines = text.splitlines()
+
+    candidate_lines = []
+    in_body = False
+
+    for line in lines:
+        line_strip = line.strip()
+
+        #Saltar cabeceras MIME hasta la primera línea vacía
+        if not in_body:
+            if line_strip == "":
+                in_body = True
+            continue
+
+        # Cortamos si llega boundary final
+        if line_strip.startswith("--"):
+            break
+
+        #Nos quedamos con base64
+        if re.fullmatch(r"[A-Za-z0-9+/=]+", line_strip):
+            candidate_lines.append(line_strip)
+    
+    base64_data = "".join(candidate_lines)
+
+    if not base64_data:
+        print("⚠️ No se encontró contenido base64 válido.")
+        print(f"Ruta: {filepath}")
+        print("Primeras 200 chars:", repr(text[:200]))
         return None
 
+    try:
+        decoded_bytes = base64.b64decode(base64_data, validate=True)
+    except Exception as e:
+        print("❌ Error decodificando base64:")
+        print(f"Ruta: {filepath}")
+        print(f"Error: {e}")
+        print("Base64 data (primeros 200 chars):", repr(base64_data[:200]))
+        return None
+    
+    edit_text = decoded_bytes.decode("utf-8", errors="ignore")
+
+    if "LIN+" not in edit_text:
+        print("⚠️ El texto decodificado no parece ser un archivo EDI válido.")
+        print(f"Ruta: {filepath}")
+        print("Primeras 200 chars:", repr(edit_text[:200]))
+        return None
+    
+    return edit_text
+    
 def extract_segments(edi_text):
     result = {
         "pedido": None,
@@ -345,15 +398,16 @@ def process_files(input_folder, output_file):
 
             #print(f"Procesando: {filename}")
 
-            decoded = decode_file(filepath)
+            edi_text = decode_file(filepath)
 
-            if decoded is None:
+            if edi_text is None:
                 continue
-
-            edi_text = decoded.decode("utf-8", errors="ignore")
+         
 
             # 👇 Usamos la función estructurada nueva
             data = extract_segments(edi_text)
+            # print("Pedido detectado:", data["pedido"])
+            # print("Lineas detectadas:", len(data["lineas"]))
 
             pedido = data["pedido"]
 
