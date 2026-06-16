@@ -66,7 +66,7 @@ def check_ip_range(network):
     return available_ips, occupied_ips, gateway, broadcast
 
 # Ejemplo de uso:
-network = "10.59.128.0/28"
+network = "10.59.129.0/28"
 available_ips, occupied_ips, gateway, broadcast = check_ip_range(network)
 
 print(f"Las siguientes IPs están libres en la red {network}:")

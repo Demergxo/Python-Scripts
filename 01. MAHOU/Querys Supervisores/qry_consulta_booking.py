@@ -6,7 +6,7 @@ date = datetime.now().strftime("%Y%m%d%H%M%S")
 #ddbb_name = ""
 
 fecha_inicio = '2026-03-09'
-fecha_fin = '2026-03-22'
+fecha_fin = '2026-05-10'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")

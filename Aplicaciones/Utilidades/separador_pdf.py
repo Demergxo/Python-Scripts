@@ -4,7 +4,7 @@ import os
 def extraer_paginas(pdf_path, paginas, output_dir):
     
     with open(pdf_path, 'rb') as file:
-        pdf_reader = pdf.PdfReader(file)
+        pdf_reader = pdf.PdfReader(file) #type:ignore
         
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -15,7 +15,7 @@ def extraer_paginas(pdf_path, paginas, output_dir):
                 
                 output_path = os.path.join(output_dir, f'pagina_{pagina}.pdf')
                 
-                pdf_writer = pdf.PdfWriter()
+                pdf_writer = pdf.PdfWriter() #type:ignore
                 pdf_writer.add_page(pagina_obj)
 
                 with open(output_path, 'wb') as output_file:

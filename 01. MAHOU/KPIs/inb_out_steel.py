@@ -29,7 +29,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
             vDocumentos
         WHERE
             ID_Cliente = 944
-            AND ID_Almacen = 129
+            AND ID_Almacen = 221
             AND (CodigoTipoDocumento = 'RS' OR CodigoTipoDocumento = 'ALB')
             AND CodigoTipoEstado IN ('040', '080', '085', '140', '130')
             AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin);

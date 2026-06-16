@@ -26,7 +26,7 @@ query = text(f"""
    
     WHERE 
         
-        ID_Almacen = 129
+        ID_Almacen = 221
         
 """)
 # AND CONVERT(date, FechaProcesoDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)

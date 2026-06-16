@@ -3,10 +3,10 @@ import pandas as pd
 from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "TiposMail"
+ddbb_name = "vMonitorizarExtraccion"
 
-fecha_inicio = '2026-03-01'
-fecha_fin = '2026-04-08'
+fecha_inicio = '2026-01-01'
+fecha_fin = '2026-06-15'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -24,10 +24,11 @@ query = text(f"""
         *
     FROM
         {ddbb_name}
-   
+    WHERE
+        ID_Almacen = 221
+        AND CONVERT(date, FechaProgramadaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
+         
         
-        
-    
 """)
 
 # query2 = text("""
@@ -46,7 +47,10 @@ query = text(f"""
 # FROM vExtraccionesCambioUbicacionAlbaran
 # WHERE
 #     ID_Cliente = 944
-#     AND ID_Almacen = 129
+#     ID_Cliente = 950 (Kimberly Klark)
+#     AND ID_Almacen = 129 (Interim)
+#     AND ID_Almacen = 221 (Steel)
+#     ID_Cliente = 950 (Kimberly Klark)
 #     AND ID_Deposito = 258
 #     AND TipoMvtoPalet = 'S'
 #     AND CantidadMvtoPalet <> 0
@@ -62,9 +66,12 @@ query = text(f"""
 #         '-', COALESCE(HuecoUbicacion, ''),
 #         '-', COALESCE(NivelUbicacion, '')
 #     ),
-#     CodigoProdClte
+# #     CodigoProdClte
 
-              
+#        WHERE
+#         ID_Cliente = 944
+#         AND ID_Almacen = 129
+#         AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)       
               
               
               
