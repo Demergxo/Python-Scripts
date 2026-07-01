@@ -3,10 +3,10 @@ import pandas as pd
 from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "vMonitorizarExtraccion"
+ddbb_name = "vUbicacionesProducto"
 
-fecha_inicio = '2026-01-01'
-fecha_fin = '2026-06-15'
+fecha_inicio = '2026-05-01'
+fecha_fin = '2026-06-18'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -21,12 +21,11 @@ engine = create_engine("mssql+pyodbc://@XGA_PROD")
 # --- QUERY SQL (rango de fechas) ---
 query = text(f"""
     SELECT
-        *
+         *
     FROM
         {ddbb_name}
     WHERE
-        ID_Almacen = 221
-        AND CONVERT(date, FechaProgramadaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
+        ID_Cliente = 847 
          
         
 """)

@@ -3,8 +3,8 @@ import pandas as pd
 import time
 import os
 
-fecha_inicio = '2026-06-08'
-fecha_fin = '2026-06-09'
+fecha_inicio = '2026-06-19'
+fecha_fin = '2026-06-22'
 
 path = os.getcwd()
 DB_FILE = f"{path}\\apoyo.db"

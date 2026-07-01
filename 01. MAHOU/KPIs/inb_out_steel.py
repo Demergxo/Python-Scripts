@@ -3,16 +3,16 @@ import pandas as pd
 from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "KPIS_inb_out"
-fecha_inicio = '2026-05-01'
-fecha_fin = '2026-05-31'
+ddbb_name = "KPIS_inb_out_steel"
+fecha_inicio = '2026-01-01'
+fecha_fin = '2026-06-30'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
     return hora
 
 def qry_inb_out(fecha_inicio, fecha_fin):
-    ddbb_name = "KPIS_inb_out"
+    ddbb_name = "KPIS_inb_out_steel"
 
     print(f"Hora de inicio: {hora()}")
 

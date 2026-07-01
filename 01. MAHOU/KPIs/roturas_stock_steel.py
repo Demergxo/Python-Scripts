@@ -5,9 +5,9 @@ import os
 
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "KPIS_roturas_stock"
-fecha_inicio = '2026-06-01'
-fecha_fin = '2026-06-21' 
+ddbb_name = "KPIS_roturas_stock_steel"
+fecha_inicio = '2026-01-01'
+fecha_fin = '2026-06-26' 
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -15,7 +15,7 @@ def hora():
 
 def qry_inb_out(fecha_inicio, fecha_fin):
     date = datetime.now().strftime("%Y%m%d%H%M%S")
-    ddbb_name = "KPIS_roturas_stock"
+    ddbb_name = "KPIS_roturas_stock_steel"
 
     path = os.getcwd()
     DB_FILE = f"{path}\\apoyo.db"
@@ -35,7 +35,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
             vDocumentos
         WHERE
             ID_Cliente = 944
-            AND ID_Almacen = 129
+            AND ID_Almacen = 221
             AND CodigoTipoDocumento = 'AJU'
             AND (
                     CodigoTipoAjuste IN ('AME', 'AX9')
@@ -69,7 +69,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
             vLineasDocumentosConsulta
         WHERE
             ID_Cliente = 944
-            AND ID_Almacen = 129
+            AND ID_Almacen = 221
             AND CodigoDeposito = '000'
             AND TipoMovimientoLineaDoc = 'S'
             AND ID_Doc IN ({placeholders})

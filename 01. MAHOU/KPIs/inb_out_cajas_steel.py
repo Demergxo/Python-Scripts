@@ -8,9 +8,9 @@ path = os.getcwd()
 DB_FILE = f"{path}\\apoyo.db"
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "KPIS_inb_out_cajas"
-fecha_inicio = '2026-06-01'
-fecha_fin = '2026-06-21'
+ddbb_name = "KPIS_inb_out_cajas_steel"
+fecha_inicio = '2026-01-01'
+fecha_fin = '2026-06-26'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -21,7 +21,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
     DB_FILE = f"{path}\\apoyo.db"
 
     date = datetime.now().strftime("%Y%m%d%H%M%S")
-    ddbb_name = "KPIS_inb_out_cajas"
+    ddbb_name = "KPIS_inb_out_cajas_steel"
 
     print(f"Hora de inicio: {hora()}")
 
@@ -38,7 +38,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
             vDocumentos
         WHERE
             ID_Cliente = 944
-            AND ID_Almacen = 129
+            AND ID_Almacen = 221
             AND CodigoTipoDocumento = 'ALB'
             AND CodigoTipoEstado IN ('040', '080', '085', '140', '130', '150')
             AND CONVERT(date, FechaProcesoDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
@@ -78,7 +78,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
             vLineasDocumentos
         WHERE
             ID_Cliente = 944
-            AND ID_Almacen = 129
+            AND ID_Almacen = 221
             AND ID_DivisionCliente = 1866
             AND TipoMovimientoLineaDoc = 'S'
             AND ID_Doc IN ({placeholders})

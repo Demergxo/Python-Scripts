@@ -3,8 +3,8 @@ import pandas as pd
 import time
 import os
 
-fecha_inicio = '2026-03-16'
-fecha_fin = '2026-03-20'
+fecha_inicio = '2026-06-19'
+fecha_fin = '2026-06-22'
 
 path = os.getcwd()
 DB_FILE = f"{path}\\apoyo.db"
@@ -198,7 +198,7 @@ def consulta_pedidos(fecha_inicio, fecha_fin):
             df5,
             on=["ID_Doc", "ID_ProdClte"], how="left")
 
-        df_45.to_csv("df_45.csv", index=False, sep=";", encoding="utf-8-sig")
+        #df_45.to_csv("df_45.csv", index=False, sep=";", encoding="utf-8-sig")
 
     # --- NORMALIZACIÓN FINAL DE CLAVES ---
         
