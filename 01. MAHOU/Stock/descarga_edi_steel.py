@@ -11,6 +11,7 @@ from sqlalchemy import create_engine, text
 from datetime import datetime
 
 base_path = os.getcwd()
+almacen =129
 
 RAW_DIR = base_path+r"\raw_files"
 
@@ -30,12 +31,13 @@ def leer_excel(ruta_archivo, hoja=0):
         print(f"Error al leer el archivo {ruta_archivo}: {e}")
         return None 
     
-def obtener_placeholders(lista, prefijo="id"):
+def obtener_placeholders(lista, almacen, prefijo="id" ): #type: ignore
     """
     Genera una lista de placeholders para una consulta SQL.
     """
     placeholders = ",".join([f":{prefijo}{i}" for i in range(len(lista))])
     params = {f"{prefijo}{i}": v for i, v in enumerate(lista)}
+    params["almacen"] = almacen
     
     return placeholders, params
 
@@ -48,14 +50,11 @@ def generar_nombres_unicos(filepath):
         contador += 1
     return filepath
 
-def generar_df_trabajo():
-    user = os.getenv("USERNAME")
+def generar_df_trabajo(df, almacen):
 
     engine = create_engine("mssql+pyodbc://@XGA_PROD")
     #Leer archivo excel
-   
-    df = leer_excel(f"C:\\Users\\{user}\\OneDrive - GXO\\Escritorio\\Archivo_muestra.xlsx")
-
+ 
     if df is None or df.empty:
         print("El archivo está vacío o no se pudo leer.")
         return pd.DataFrame()  # Devuelve un DataFrame vacío en caso de error
@@ -66,7 +65,7 @@ def generar_df_trabajo():
     if not valores:
         return pd.DataFrame()  # evita query inválida tipo IN ()
 
-    placeholders, params = obtener_placeholders(valores)
+    placeholders, params = obtener_placeholders(valores, almacen=almacen)
 
     query_iddoc = text(f"""
         SELECT
@@ -76,7 +75,7 @@ def generar_df_trabajo():
             vDocumentos
         WHERE
             ID_Cliente = 944
-            AND ID_Almacen = 221
+            AND ID_Almacen = :almacen
             AND CodigoTipoDocumento = 'ALB'
             AND AlbaranDoc IN ({placeholders})
     """)
@@ -101,7 +100,7 @@ def generar_df_trabajo():
     )
     #print(ids_alb)
 
-    placeholders, params = obtener_placeholders(ids_alb)
+    placeholders, params = obtener_placeholders(ids_alb, almacen=almacen)
 
     query_subestados = text(f"""
         SELECT
@@ -123,7 +122,7 @@ def generar_df_trabajo():
     id_subest =df_23["ID_SubEstadosDocumentos"].dropna().astype(str).unique().tolist()
     #print(id_subest)
 
-    placeholders, params = obtener_placeholders(id_subest)
+    placeholders, params = obtener_placeholders(id_subest, almacen=almacen)
 
     query_ficheros = text(f"""
         SELECT
@@ -165,7 +164,8 @@ def extraer_nombre_fichero(ruta, content_disposition=''):
 
     return nombre
 
-def descargar_edi():
+def descargar_edi(df, almacen):
+    limpiar_raw_files(RAW_DIR)
     user = "JGMERAS"
     password = "M1j3kMICrdmxlRFVY0g1"
 
@@ -176,7 +176,7 @@ def descargar_edi():
         print(f"Creando carpeta: {RAW_DIR}")
         os.makedirs(RAW_DIR, exist_ok=True)
 
-    ruta_list = generar_df_trabajo()
+    ruta_list = generar_df_trabajo(df, almacen)
     if not ruta_list: #type:ignore
         print("No hay rutas para procesar.")
         return
@@ -238,14 +238,15 @@ def descargar_edi():
 
                             #print("Descarga erronea, se obtuvo HTML en vez del archivo")
             except Exception as e:
-                print("Error descargando ruta")
-                print(ruta)
-                print(type(e).__name__, e)
+                #print("Error descargando ruta")
+                #print(ruta)
+                #print(type(e).__name__, e)
                 continue
                 
 
     finally:
         session.close()
+    process_files(RAW_DIR, "parsed_edis")
 
 def extract_base64(lines):
     """
@@ -438,6 +439,7 @@ def process_files(input_folder, output_file):
             worksheet.column_dimensions[col[0].column_letter].width = max_length + 2
 
     print(f"\n✅ Excel generado: {output_file}")
+    return output_file
 
 def limpiar_raw_files(folder_path):
     if not os.path.exists(folder_path):
@@ -459,7 +461,7 @@ def limpiar_raw_files(folder_path):
     print(f"Archivos eliminados: {archivos_eliminados}")
 
 if __name__ == "__main__":
-    limpiar_raw_files(RAW_DIR)
-    descargar_edi()
-    process_files(RAW_DIR, "parsed_edis")
+    
+    descargar_edi(df, almacen)#type: ignore
+    
     

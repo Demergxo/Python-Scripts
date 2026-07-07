@@ -5,6 +5,7 @@ import os
 
 fecha_inicio = '2026-07-06'
 fecha_fin = '2026-07-08'
+almacen = 129
 
 path = os.getcwd()
 DB_FILE = f"{path}\\apoyo.db"
@@ -26,7 +27,7 @@ def normalize_key(df, col):
         .str.strip()
     )
 
-def consulta_pedidos(fecha_inicio, fecha_fin):
+def consulta_pedidos(fecha_inicio, fecha_fin, almacen):
     date = time.strftime("%Y%m%d%H%M%S")
 
     # --- CONEXIÓN SQL SERVER ---
@@ -44,7 +45,7 @@ def consulta_pedidos(fecha_inicio, fecha_fin):
         FROM vDocumentos
         WHERE
             ID_Cliente = 944
-            AND ID_Almacen = 221
+            AND ID_Almacen = :almacen
             AND CodigoDivisionCliente = '1084'
             AND CodigoTipoEstado IN ('000', '010', '020')
             AND CodigoTipoDocumento = 'ALB'
@@ -59,7 +60,7 @@ def consulta_pedidos(fecha_inicio, fecha_fin):
         FROM Documentos
         WHERE
             ID_Cliente = 944
-            AND ID_Almacen = 221
+            AND ID_Almacen = :almacen
             AND ID_DivisionCliente = '1866'
             AND (ID_TipoDocumento = 1 OR ID_TipoDocumento = 3)
             AND CONVERT(date, FechaTeoricaCargaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin);
@@ -79,8 +80,8 @@ def consulta_pedidos(fecha_inicio, fecha_fin):
     """)
 
     with engine.connect() as conn:
-        df1 = pd.read_sql(q1, conn, params={"inicio": fecha_inicio, "fin": fecha_fin})
-        df2 = pd.read_sql(q2, conn, params={"inicio": fecha_inicio, "fin": fecha_fin})
+        df1 = pd.read_sql(q1, conn, params={"inicio": fecha_inicio, "fin": fecha_fin, "almacen": almacen})
+        df2 = pd.read_sql(q2, conn, params={"inicio": fecha_inicio, "fin": fecha_fin, "almacen": almacen})
         df3 = pd.read_sql(q3, conn)
     
         #df1.to_csv("df1.csv", index=False, sep=";", encoding="utf-8-sig")
@@ -170,7 +171,7 @@ def consulta_pedidos(fecha_inicio, fecha_fin):
                     ID_ProdClte
                 FROM vLineasDocumentos
                 WHERE ID_Cliente = 944
-                AND ID_Almacen = 221
+                AND ID_Almacen = :almacen
                 AND ID_Doc IN :ids
             """).bindparams(bindparam("ids", expanding=True))
         )
@@ -189,9 +190,9 @@ def consulta_pedidos(fecha_inicio, fecha_fin):
             
 
         with engine.connect() as conn:
-            df4 = pd.read_sql(q4, conn, params={"ids": ids_alb}) #type: ignore
-            df5 = pd.read_sql(q5, conn, params={"ids": ids_alb}) #type: ignore
-            df6 = pd.read_sql(q6, conn, params={"ids": ids_ext}) #type: ignore
+            df4 = pd.read_sql(q4, conn, params={"ids": ids_alb, "almacen": almacen}) #type: ignore
+            df5 = pd.read_sql(q5, conn, params={"ids": ids_alb, "almacen": almacen}) #type: ignore
+            df6 = pd.read_sql(q6, conn, params={"ids": ids_ext, "almacen": almacen}) #type: ignore
         
         df4["Referencia"] = df4["Referencia"].astype(str).str.strip()
         df5["ID_ProdClte"] = df5["ID_ProdClte"].astype(str).str.strip()
@@ -329,6 +330,7 @@ def consulta_pedidos(fecha_inicio, fecha_fin):
 
     engine.dispose()
     print("OK ->", nombre_archivo)
+    return nombre_archivo
 
 if __name__ == "__main__":
-    consulta_pedidos(fecha_inicio, fecha_fin)
+    consulta_pedidos(fecha_inicio, fecha_fin, almacen)
