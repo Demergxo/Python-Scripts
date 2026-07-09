@@ -3,10 +3,10 @@ import pandas as pd
 from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "vUbicacionesProducto"
+ddbb_name = "Ubicaciones"
 
-fecha_inicio = '2026-05-01'
-fecha_fin = '2026-06-18'
+fecha_inicio = '2026-07-03'
+fecha_fin = '2026-07-06'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -21,17 +21,58 @@ engine = create_engine("mssql+pyodbc://@XGA_PROD")
 # --- QUERY SQL (rango de fechas) ---
 query = text(f"""
     SELECT
-         *
+        *
     FROM
         {ddbb_name}
     WHERE
-        ID_Cliente = 847 
-         
+        ID_Almacen = 221
+        
+        
+        
         
 """)
 
-# query2 = text("""
-   #          
+query2 = text(f"""
+    SELECT OBJECT_DEFINITION(OBJECT_ID('dbo.{ddbb_name}')) AS Definicion
+""")
+
+
+query_find = text("""
+    SELECT
+        DB_NAME() AS BaseDatosActual,
+        s.name AS SchemaName,
+        o.name AS ObjectName,
+        o.type_desc,
+        OBJECT_DEFINITION(o.object_id) AS Definicion
+    FROM sys.objects o
+    INNER JOIN sys.schemas s
+        ON o.schema_id = s.schema_id
+    WHERE o.name = 'vExpedienteConsultaExtraccion'
+""")
+
+query_def = text("""
+    SELECT 
+        m.definition
+    FROM sys.sql_modules m
+    INNER JOIN sys.objects o
+        ON m.object_id = o.object_id
+    INNER JOIN sys.schemas s
+        ON o.schema_id = s.schema_id
+    WHERE 
+        s.name = 'dbo'
+        AND o.name = 'vExpedienteConsultaExtraccion'
+""")
+
+
+query_permiso = text("""
+    SELECT 
+        HAS_PERMS_BY_NAME(
+            'dbo.vExpedienteConsultaExtraccion',
+            'OBJECT',
+            'VIEW DEFINITION'
+        ) AS TienePermisoViewDefinition
+""")
+
               
 # SELECT
 #     CONCAT(
@@ -130,6 +171,7 @@ query = text(f"""
 # --- EJECUTAR CONSULTA ---
 with engine.connect() as conn:
     df = pd.read_sql(query, conn, params={"inicio": fecha_inicio, "fin": fecha_fin} )
+#print(df)
 
 # --- EXPORTAR ---
 nombre_archivo = f"{ddbb_name}_{date}.xlsx"

@@ -11,7 +11,6 @@ from sqlalchemy import create_engine, text
 from datetime import datetime
 
 base_path = os.getcwd()
-almacen =129
 
 RAW_DIR = base_path+r"\raw_files"
 
@@ -31,7 +30,7 @@ def leer_excel(ruta_archivo, hoja=0):
         print(f"Error al leer el archivo {ruta_archivo}: {e}")
         return None 
     
-def obtener_placeholders(lista, almacen, prefijo="id" ): #type: ignore
+def obtener_placeholders(lista, almacen, prefijo="id"):
     """
     Genera una lista de placeholders para una consulta SQL.
     """
@@ -50,11 +49,14 @@ def generar_nombres_unicos(filepath):
         contador += 1
     return filepath
 
-def generar_df_trabajo(df, almacen):
+def generar_df_trabajo(almacen):
+    user = os.getenv("USERNAME")
 
     engine = create_engine("mssql+pyodbc://@XGA_PROD")
     #Leer archivo excel
- 
+   
+    df = leer_excel(f"C:\\Users\\{user}\\OneDrive - GXO\\Escritorio\\Archivo_muestra.xlsx")
+
     if df is None or df.empty:
         print("El archivo está vacío o no se pudo leer.")
         return pd.DataFrame()  # Devuelve un DataFrame vacío en caso de error
@@ -65,7 +67,7 @@ def generar_df_trabajo(df, almacen):
     if not valores:
         return pd.DataFrame()  # evita query inválida tipo IN ()
 
-    placeholders, params = obtener_placeholders(valores, almacen=almacen)
+    placeholders, params = obtener_placeholders(valores, almacen)
 
     query_iddoc = text(f"""
         SELECT
@@ -79,6 +81,8 @@ def generar_df_trabajo(df, almacen):
             AND CodigoTipoDocumento = 'ALB'
             AND AlbaranDoc IN ({placeholders})
     """)
+    #AND ID_Almacen = 220 (Cabanillas)
+    #AND ID_Almacen = 221 (Steel)
 
     with engine.connect() as conn:
         df_2 = pd.read_sql(query_iddoc, conn, params=params)
@@ -100,7 +104,7 @@ def generar_df_trabajo(df, almacen):
     )
     #print(ids_alb)
 
-    placeholders, params = obtener_placeholders(ids_alb, almacen=almacen)
+    placeholders, params = obtener_placeholders(ids_alb, almacen)
 
     query_subestados = text(f"""
         SELECT
@@ -122,7 +126,7 @@ def generar_df_trabajo(df, almacen):
     id_subest =df_23["ID_SubEstadosDocumentos"].dropna().astype(str).unique().tolist()
     #print(id_subest)
 
-    placeholders, params = obtener_placeholders(id_subest, almacen=almacen)
+    placeholders, params = obtener_placeholders(id_subest, almacen)
 
     query_ficheros = text(f"""
         SELECT
@@ -164,8 +168,7 @@ def extraer_nombre_fichero(ruta, content_disposition=''):
 
     return nombre
 
-def descargar_edi(df, almacen):
-    limpiar_raw_files(RAW_DIR)
+def descargar_edi(almacen):
     user = "JGMERAS"
     password = "M1j3kMICrdmxlRFVY0g1"
 
@@ -176,7 +179,7 @@ def descargar_edi(df, almacen):
         print(f"Creando carpeta: {RAW_DIR}")
         os.makedirs(RAW_DIR, exist_ok=True)
 
-    ruta_list = generar_df_trabajo(df, almacen)
+    ruta_list = generar_df_trabajo(almacen)
     if not ruta_list: #type:ignore
         print("No hay rutas para procesar.")
         return
@@ -238,15 +241,14 @@ def descargar_edi(df, almacen):
 
                             #print("Descarga erronea, se obtuvo HTML en vez del archivo")
             except Exception as e:
-                #print("Error descargando ruta")
-                #print(ruta)
-                #print(type(e).__name__, e)
+                print("Error descargando ruta")
+                print(ruta)
+                print(type(e).__name__, e)
                 continue
                 
 
     finally:
         session.close()
-    return process_files(RAW_DIR, "parsed_edis")
 
 def extract_base64(lines):
     """
@@ -330,52 +332,56 @@ def decode_file(filepath):
     return edit_text
     
 def extract_segments(edi_text):
-    result = {
-        "pedido": None,
-        "lineas": []
-    }
+    """
+    Extrae uno o varios pedidos de un texto EDI.
 
-    # 1. Pedido (cabecera)
-    match = re.search(r"BGM\+80E:[^+]*\+([^+]+)", edi_text)
-    if match:
-        result["pedido"] = match.group(1)
+    Devuelve una lista de diccionarios:
+    [
+        {
+            "pedido": "...",
+            "hora_entrega": "..."
+        },
+        ...
+    ]
+    """
 
-    # 2. Dividir por líneas (LIN)
-    bloques = re.split(r"(?=LIN\+)", edi_text)
+    resultados = []
 
-    for bloque in bloques:
-        if not bloque.startswith("LIN"):
-            continue
+    # Buscamos todas las posiciones donde empieza un pedido
+    bgm_matches = list(re.finditer(r"BGM\+80E(?:::[^+]*)?\+([^+']+)", edi_text))
 
-        linea = {
-            "referencia": None,
-            "DTM+264": None,
-            "DTM+267": None,
-            "RFF+FCP": None
-        }
+    if not bgm_matches:
+        return resultados
 
-        # 3. Referencia (PIA)
-        pia = re.search(r"PIA\+1\+([^:]+):SA", bloque)
-        if pia:
-            linea["referencia"] = pia.group(1) #type:ignore
+    for idx, match in enumerate(bgm_matches):
+        pedido = match.group(1)
 
-        # 4. Fechas
-        dtm264 = re.search(r"DTM\+264:(\d{8})", bloque)
-        if dtm264:
-            linea["DTM+264"] = datetime.strptime(dtm264.group(1), "%Y%m%d").strftime("%Y-%m-%d") #type:ignore
+        # Inicio del bloque actual
+        start = match.start()
 
-        dtm267 = re.search(r"DTM\+267:(\d{8})", bloque)
-        if dtm267:
-            linea["DTM+267"] = datetime.strptime(dtm267.group(1), "%Y%m%d").strftime("%Y-%m-%d") #type:ignore
+        # Fin del bloque: antes del siguiente BGM+80E o hasta el final del texto
+        if idx + 1 < len(bgm_matches):
+            end = bgm_matches[idx + 1].start()
+        else:
+            end = len(edi_text)
 
-        # 5. RFF
-        rff = re.search(r"RFF\+FCP:([^']+)", bloque)
-        if rff:
-            linea["RFF+FCP"] = rff.group(1) #type:ignore
+        bloque = edi_text[start:end]
 
-        result["lineas"].append(linea)
+        # Buscar hora dentro del bloque del pedido actual
+        hora_entrega = None
+        ftx = re.search(r"FTX\+OSI\+\+\+([0-9?::\-]+)", bloque)
 
-    return result
+        if ftx:
+            hora_entrega = ftx.group(1)
+            hora_entrega = hora_entrega.replace("?:", ":")
+
+        resultados.append({
+            "pedido": pedido,
+            "hora_entrega": hora_entrega
+        })
+
+    return resultados
+
 
 def process_files(input_folder, output_file):
 
@@ -406,26 +412,30 @@ def process_files(input_folder, output_file):
          
 
             # 👇 Usamos la función estructurada nueva
-            data = extract_segments(edi_text)
+            pedidos = extract_segments(edi_text)
             # print("Pedido detectado:", data["pedido"])
             # print("Lineas detectadas:", len(data["lineas"]))
 
-            pedido = data["pedido"]
-
-            for linea in data["lineas"]:
+            
+            for data in pedidos:
                 row = {
-                    "Pedido": pedido,
-                    "Referencia": linea["referencia"],
-                    "FCP Mayor o igual": linea["DTM+264"],
-                    "FCP Exactamente igual": linea["DTM+267"],
-                    "FCP según % vida útil": linea["RFF+FCP"],
-                    "Archivo": filename  # opcional, muy útil para trazabilidad
+                    "Pedido": data["pedido"],
+                    "Hora entrega": data["hora_entrega"],
+                    "Archivo": filename
                 }
+
                 all_rows.append(row)
+
             bar()
+
 
     # 🔹 Crear DataFrame
     df = pd.DataFrame(all_rows)
+        # Limpieza de columnas técnicas
+    df = df.drop(
+    columns=["Archivo"],
+    errors="ignore"
+    )
 
     # 🔹 Guardar en un único Excel
     with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
@@ -439,7 +449,6 @@ def process_files(input_folder, output_file):
             worksheet.column_dimensions[col[0].column_letter].width = max_length + 2
 
     print(f"\n✅ Excel generado: {output_file}")
-    return output_file
 
 def limpiar_raw_files(folder_path):
     if not os.path.exists(folder_path):
@@ -460,8 +469,24 @@ def limpiar_raw_files(folder_path):
 
     print(f"Archivos eliminados: {archivos_eliminados}")
 
+
+
 if __name__ == "__main__":
     
-    descargar_edi(df, almacen)#type: ignore
-    
+    print("Introducir almacen (1) Cabanillas o 2 (Steel):")
+    while True:
+        almacen = input("Elige: ")
+        if almacen == "1":
+            almacen = 220
+            break
+        if almacen == "2":
+            almacen = 221
+            break
+        else:
+            print("Almacén no válido")
+            
+
+    limpiar_raw_files(RAW_DIR)
+    descargar_edi(almacen)
+    process_files(RAW_DIR, "horas_edis")
     

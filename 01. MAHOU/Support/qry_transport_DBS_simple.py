@@ -12,8 +12,11 @@ DB_FILE = f"{path}\\clientes.db"
 def consulta_DBS(fecha_inicio,  hora_inicio, fecha_fin, hora_fin):
 
     
-    hora_inicio_str = hora_inicio.toString("HH:mm:ss")
-    hora_fin_str = hora_fin.toString("HH:mm:ss")
+    hora_inicio_obj = datetime.strptime(hora_inicio, "%H:%M:%S")
+    hora_inicio_str = hora_inicio_obj.strftime("%H:%M:%S")
+
+    hora_fin_obj = datetime.strptime(hora_fin, "%H:%M:%S")
+    hora_fin_str = hora_fin_obj.strftime("%H:%M:%S")
     
     # --- CONFIGURACIÓN GENERAL ---
     date = time.strftime("%Y%m%d%H%M%S")
