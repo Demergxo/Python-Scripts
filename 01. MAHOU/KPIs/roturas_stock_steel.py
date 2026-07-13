@@ -63,7 +63,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
     query_palets = text(f"""
         SELECT
             ID_Doc,
-            CEILING(CAST(PesoBrutoProdClte AS FLOAT)) AS Peso, CodigoProdClte AS Referencia, CantidadLineaDoc
+            CEILING(CAST(PesoBrutoProdClte AS FLOAT)) AS Peso, CodigoProdClte AS Referencia, CantidadLineaDoc, CajasPaletProdClte
 
         FROM
             vLineasDocumentosConsulta
@@ -90,6 +90,8 @@ def qry_inb_out(fecha_inicio, fecha_fin):
             "Referencia": "first",
             "Peso": "sum",
             "CantidadLineaDoc": "sum",
+            "CajasPaletProdClte": "first"
+            
             
         })
 )

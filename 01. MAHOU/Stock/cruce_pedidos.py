@@ -340,15 +340,45 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
         "FCP según % vida útil"
     ]
 
+    # Nos quedamos solo con las columnas necesarias
+    df_fcp_cruce = df_fcp[columnas_fcp].copy()
+
+    # Limpiar vacíos
+    for col in [
+        "FCP Mayor o igual",
+        "FCP Exactamente igual",
+        "FCP según % vida útil"
+    ]:
+        df_fcp_cruce[col] = (
+            df_fcp_cruce[col]
+            .replace("", pd.NA)
+            .replace("nan", pd.NA)
+            .replace("None", pd.NA)
+        )
+
+    # Agrupar para que haya UNA sola línea por Pedido + Referencia
+    # y conservar el primer valor informado de cada FCP
+    df_fcp_cruce = (
+        df_fcp_cruce
+        .groupby(["Pedido", "Referencia"], as_index=False)
+        .agg({
+            "FCP Mayor o igual": "first",
+            "FCP Exactamente igual": "first",
+            "FCP según % vida útil": "first"
+        })
+    )
+
+    # Control: ahora este merge debe ser muchos-a-uno
     df_cruce = df_pedidos.merge(
-        df_fcp[columnas_fcp],
+        df_fcp_cruce,
         left_on=["Albarán", "Referencia"],
         right_on=["Pedido", "Referencia"],
-        how="left"
+        how="left",
+        validate="m:1"
     )
 
     df_cruce = df_cruce.drop(columns=["Pedido"], errors="ignore")
-
+    
     # =========================
     # 3) Obtener stock SQL Server para maestro de fechas
     # =========================

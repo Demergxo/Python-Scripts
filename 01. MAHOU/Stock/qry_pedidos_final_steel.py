@@ -98,8 +98,23 @@ def consulta_pedidos(fecha_inicio, fecha_fin, almacen):
     
     df3["Descripción"] = df3["Descripción"].astype(str).str.strip()
 
+    df2["Fecha de Carga"] = pd.to_datetime(
+    df2["Fecha de Carga"],
+    errors="coerce",
+    dayfirst=True
+    )
+
+    df2 = (
+        df2
+        .sort_values(["Albarán", "Fecha de Carga"])
+        .groupby("Albarán", as_index=False)
+        .agg({
+            "Fecha de Carga": "first"
+        })
+    )
+
     # --- MERGE 1+2 ---
-    df_12 = df1.merge(df2, on="Albarán", how="left")
+    df_12 = df1.merge(df2, on="Albarán", how="left", validate="m:1")
     #df_12.to_csv("df_12.csv", index=False, sep=";", encoding="utf-8-sig")
 
     # --- MERGE (1+2)+3 ---
@@ -131,8 +146,11 @@ def consulta_pedidos(fecha_inicio, fecha_fin, almacen):
     engine_sqlite = create_engine(f"sqlite:///{DB_FILE}")
     df_maestro = pd.read_sql("SELECT ID_ProdClte, CodigoProdClte FROM maestro_msm", engine_sqlite)
 
-    df_maestro["ID_ProdClte"] = pd.to_numeric(df_maestro["ID_ProdClte"], errors="coerce").astype(str)
-    df_maestro["CodigoProdClte"] = df_maestro["CodigoProdClte"].astype(str).str.strip()
+    df_maestro["ID_ProdClte"] = pd.to_numeric(df_maestro["ID_ProdClte"], errors="coerce").astype("Int64").astype(str)
+    df_maestro["CodigoProdClte"] = df_maestro["CodigoProdClte"].astype(str).fillna("").str.strip().str.replace(r"\.0$", "", regex=True)
+    
+    df_maestro = df_maestro.drop_duplicates(subset=["CodigoProdClte"], keep="first")
+
     # df_maestro.to_csv("df_maestro.csv", index=False, sep=";", encoding="utf-8-sig")
 
     # ========== 1) df_123: añadimos ID_ProdClte a partir de Referencia ==========
@@ -211,6 +229,17 @@ def consulta_pedidos(fecha_inicio, fecha_fin, almacen):
         df5["ID_ProdClte"] = df5["ID_ProdClte"].astype(str).fillna("").str.strip()
         df5["FCP"] = pd.to_datetime(df5["FCP"], errors="coerce")
 
+        df5["ID_ProdClte"] = (pd.to_numeric(df5["ID_ProdClte"], errors="coerce").astype("Int64").astype("string")
+        )
+
+        df5 = (df5
+            .sort_values(["ID_Doc", "ID_ProdClte", "FCP"])
+            .groupby(["ID_Doc", "ID_ProdClte"], as_index=False)
+            .agg({
+                "FCP": "first"
+            })
+        )
+
         # --- df4: traducimos Referencia -> ID_ProdClte para poder unir por ID ---
         df4 = df4.merge(
             df_maestro.rename(columns={"CodigoProdClte": "Referencia"}),
@@ -224,7 +253,7 @@ def consulta_pedidos(fecha_inicio, fecha_fin, almacen):
         # --- Unimos df4 + df5 por (ID_Doc, ID_ProdClte) ---
         df_45 = df4.merge(
             df5,
-            on=["ID_Doc", "ID_ProdClte"], how="left")
+            on=["ID_Doc", "ID_ProdClte"], how="left", validate="m:1")
 
         #df_45.to_csv("df_45.csv", index=False, sep=";", encoding="utf-8-sig")
 
@@ -281,13 +310,40 @@ def consulta_pedidos(fecha_inicio, fecha_fin, almacen):
         errors="coerce"
     ).astype("Int64").astype("string")
 
+    df6["ID_Extraccion"] = (
+    pd.to_numeric(df6["ID_Extraccion"], errors="coerce")
+    .astype("Int64")
+    .astype("string")
+)
+
+    df6["PorcentajeCargaCompleta"] = (
+        df6["PorcentajeCargaCompleta"]
+        .astype(str)
+        .str.replace("%", "", regex=False)
+        .str.replace(",", ".", regex=False)
+    )
+
+    df6["PorcentajeCargaCompleta"] = pd.to_numeric(
+        df6["PorcentajeCargaCompleta"],
+        errors="coerce"
+    )
+
+    df6 = (
+        df6
+        .groupby("ID_Extraccion", as_index=False)
+        .agg({
+            "PorcentajeCargaCompleta": "max"
+        })
+    )
+
 
     # Merge con porcentaje
     df_final = df_final.merge(
         df6[["ID_Extraccion", "PorcentajeCargaCompleta"]],
         left_on="Extraccion",
         right_on="ID_Extraccion",
-        how="left"
+        how="left",
+        validate="m:1"  
     )
 
 
