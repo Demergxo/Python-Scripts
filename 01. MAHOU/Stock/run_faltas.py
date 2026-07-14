@@ -297,7 +297,7 @@ def revisar_codigo():
     engine_sqlite = create_engine(f"sqlite:///{DB_FILE}")
     query = text("""SELECT 
                         CodigoProdClte AS [Referencia], NombreProdClte AS [Descripcion], PesoBrutoProdClte AS [Peso],
-                        VolumenBrutoProdClte AS [Volumen], CASE WHEN ConvertirPaletACajaProdClte = 1 THEN 'SI' ELSE 'NO'END AS [Hijo],
+                        VolumenBrutoProdClte AS [Volumen], CASE WHEN ConvertirPaletACajaProdClte = 1 THEN 'SI' ELSE 'NO'END AS [Hijo], CodigoUnidad AS [Tipo],
                          CajasPaletProdClte AS [Cajas Palet], AltoPaletProdClte AS [Alto Palet], AnchoPaletProdClte AS [Ancho Palet], LargoPaletProdClte AS [Largo Palet],
                         CapasPaletProdClte AS [Capas Palet],DiasFechaProdClte AS [Días Prod(Corto)], DiasCaducidadProdClte AS [Días Caducidad(Largo)]
                     FROM
@@ -333,6 +333,7 @@ def update_codigo():
         ("PesoBrutoProdClte", "Peso", "float"),
         ("VolumenBrutoProdClte", "Volumen", "float"),
         ("ConvertirPaletACajaProdClte", "Convertir a caja", "bool"),
+        ("CodigoUnidad", "Tipo", "str"),
         ("CajasPaletProdClte", "Cajas Palet", "int"),
         ("AltoPaletProdClte", "Alto Palet", "float"),
         ("AnchoPaletProdClte", "Ancho Palet", "float"),

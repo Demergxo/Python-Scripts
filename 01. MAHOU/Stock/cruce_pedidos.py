@@ -545,6 +545,7 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
         .drop_duplicates(subset=["Referencia"], keep="first")
         [[
             "Referencia",
+            "CodigoUnidad",
             "FechaProduccionPalet",
             "FechaCaducidadCalculada",
             "DiasCaducidadProdClte",
