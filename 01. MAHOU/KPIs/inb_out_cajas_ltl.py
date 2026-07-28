@@ -12,8 +12,8 @@ archive = f"C:\\Users\\{usuario}\\OneDrive - GXO\\Escritorio\\KPIS Transporte MS
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_inb_out_cajas_ltl"
-fecha_inicio = '2026-05-01'
-fecha_fin = '2026-05-31'
+fecha_inicio = '2026-07-01'
+fecha_fin = '2026-07-19'
 
 def chunks(lst, n):
     for i in range(0, len(lst), n):

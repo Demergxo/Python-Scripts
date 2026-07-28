@@ -11,9 +11,9 @@ usuario = os.environ['USERNAME']
 archive = f"C:\\Users\\{usuario}\\OneDrive - GXO\\Escritorio\\KPIS Transporte MSM.xlsx"
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "KPIS_inb_out_cajas_ltl"
-fecha_inicio = '2026-05-01'
-fecha_fin = '2026-05-31'
+ddbb_name = "KPIS_inb_out_cajas_ltl_steel"
+fecha_inicio = '2026-07-01'
+fecha_fin = '2026-07-19'
 
 def chunks(lst, n):
     for i in range(0, len(lst), n):

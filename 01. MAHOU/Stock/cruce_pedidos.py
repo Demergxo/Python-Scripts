@@ -11,6 +11,76 @@ USER = os.getenv("USERNAME")
 
 almacen = 221
 
+def consumir_stock_alternativo_por_cajas(
+    stock_virtual,
+    referencia,
+    fecha_requerida,
+    cantidad_cajas,
+    cajas_palet
+):
+    """
+    Busca stock de una referencia alternativa/sustitutiva.
+
+    El stock físico viene en unidades de stock/palet.
+    Para saber cajas disponibles:
+        cajas_disponibles = Stock * CajasPaletProdClte
+
+    Si hay cajas suficientes, consume el stock equivalente.
+    Si no hay cajas suficientes, no descuenta nada.
+    """
+
+    if referencia is None or str(referencia).strip() == "":
+        return pd.NaT, 0, 0, "Rotura!"
+
+    if cantidad_cajas <= 0:
+        return pd.NaT, 0, 0, ""
+
+    referencia = str(referencia).strip()
+
+    cajas_palet = pd.to_numeric(cajas_palet, errors="coerce")
+
+    if pd.isna(cajas_palet) or cajas_palet <= 0:
+        cajas_palet = 1
+
+    candidatos = stock_virtual[
+        (stock_virtual["Referencia"] == referencia)
+        & (stock_virtual["Stock"] > 0)
+    ].copy()
+
+    if pd.notna(fecha_requerida):
+        candidatos = candidatos[candidatos["Caducidad"] >= fecha_requerida]
+
+    candidatos = candidatos.sort_values("Caducidad")
+
+    if candidatos.empty:
+        return pd.NaT, 0, 0, "Rotura!"
+
+    stock_palets_disponible = candidatos["Stock"].sum()
+    stock_cajas_disponible = stock_palets_disponible * cajas_palet
+
+    fecha_propuesta = candidatos.iloc[0]["Caducidad"]
+
+    if stock_cajas_disponible < cantidad_cajas:
+        return fecha_propuesta, stock_palets_disponible, stock_cajas_disponible, "Rotura!"
+
+    pendiente_cajas = cantidad_cajas
+
+    for idx in candidatos.index:
+
+        stock_palets_linea = stock_virtual.loc[idx, "Stock"]
+        cajas_linea = stock_palets_linea * cajas_palet
+
+        consumo_cajas = min(cajas_linea, pendiente_cajas)
+        consumo_palets = consumo_cajas / cajas_palet
+
+        stock_virtual.loc[idx, "Stock"] = float(stock_virtual.loc[idx, "Stock"]) - float(consumo_palets)
+        pendiente_cajas -= consumo_cajas
+
+        if pendiente_cajas <= 0:
+            break
+
+    return fecha_propuesta, stock_palets_disponible, stock_cajas_disponible, "OK"
+
 def buscar_stock_referencia_alternativa(df_stock_base, referencia, fecha_requerida):
     """
     Busca stock de una referencia alternativa.
@@ -415,10 +485,12 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
             RTRIM(CodigoProdClte) AS Referencia,
             CodigoUnidad,
             DiasCaducidadProdClte,
-            ID_ProdClteSustitutivo 
+            ID_ProdClteSustitutivo,
+            CajasPaletProdClte
         FROM
             maestro_msm
     """)
+
 
     with engine_sqlite.connect() as conn:
         df_maestro = pd.read_sql(query_maestro, conn)
@@ -434,6 +506,14 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
 
     df_maestro["ID_ProdClte"] = normalizar_id(df_maestro["ID_ProdClte"])
     df_maestro["ID_ProdClteSustitutivo"] = normalizar_id(df_maestro["ID_ProdClteSustitutivo"])
+
+    df_maestro["CajasPaletProdClte"] = pd.to_numeric(df_maestro["CajasPaletProdClte"], errors="coerce").fillna(1)
+
+    df_factor_cajas = (df_maestro[["Referencia", "CajasPaletProdClte"]].drop_duplicates(subset=["Referencia"]).copy())
+
+    
+    dict_cajas_palet = (df_factor_cajas.set_index("Referencia")["CajasPaletProdClte"].to_dict())
+
 
     # =========================
     # 5) Cruzar stock SQL con maestro
@@ -543,12 +623,12 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
         df_1maestro
         .sort_values(["Referencia", "FechaProduccionPalet"])
         .drop_duplicates(subset=["Referencia"], keep="first")
-        [[
+        [[            
             "Referencia",
-            "CodigoUnidad",
             "FechaProduccionPalet",
             "FechaCaducidadCalculada",
             "DiasCaducidadProdClte",
+            "CodigoUnidad",
             "ID_ProdClteSustitutivo",
             "ReferenciaSustitutiva"
         ]]
@@ -656,31 +736,34 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
     # 12) ÚNICO stock virtual compartido
     # =========================
 
+    df_stock["Stock"] = pd.to_numeric(df_stock["Stock"], errors="coerce").fillna(0).astype(float)
+
     stock_virtual = df_stock.copy()
+    stock_virtual["Stock"] = stock_virtual["Stock"].astype(float)
 
    # =========================
     # 13) Crear columnas resultado
     # =========================
 
     df_cruce["FechaPropuesta_MayorIgual"] = pd.NaT
-    df_cruce["StockDisponible_MayorIgual"] = 0
+    df_cruce["StockDisponible_MayorIgual"] = 0.0
     df_cruce["Resultado_MayorIgual"] = ""
 
     df_cruce["FechaPropuesta_Exacta"] = pd.NaT
-    df_cruce["StockDisponible_Exacta"] = 0
+    df_cruce["StockDisponible_Exacta"] = 0.0
     df_cruce["Resultado_Exacta"] = ""
 
     df_cruce["FechaPropuesta_Porcentaje"] = pd.NaT
-    df_cruce["StockDisponible_Porcentaje"] = 0
+    df_cruce["StockDisponible_Porcentaje"] = 0.0
     df_cruce["Resultado_Porcentaje"] = ""
 
     df_cruce["FechaPropuesta_SinFCP"] = pd.NaT
-    df_cruce["StockDisponible_SinFCP"] = 0
+    df_cruce["StockDisponible_SinFCP"] = 0.0
     df_cruce["Resultado_SinFCP"] = ""
 
     df_cruce["CriterioAplicado"] = ""
     df_cruce["FechaPropuesta_Final"] = pd.NaT
-    df_cruce["StockDisponible_Final"] = 0
+    df_cruce["StockDisponible_Final"] = 0.0
     df_cruce["Resultado_Final"] = ""
 
 
@@ -781,15 +864,7 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
             df_cruce.loc[idx, "StockDisponible_Final"] = stock
             df_cruce.loc[idx, "Resultado_Final"] = estado
 
-    # =========================
-    # 16.5) Comprobar motivos rotura
-    # =========================
-    df_cruce["MotivoRotura"] = ""
 
-    df_cruce.loc[
-        df_cruce["Resultado_Final"] == "Rotura!",
-        "MotivoRotura"
-    ] = "Stock insuficiente"
 
 
     # =========================
@@ -797,7 +872,6 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
     # =========================
 
     columnas_fecha_export = [
-        "FCP_SustitutivaInversa",
         "FCP Mayor o igual",
         "FCP Exactamente igual",
         "FechaProduccionPalet",
@@ -807,27 +881,34 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
         "FechaPropuesta_Exacta",
         "FechaPropuesta_Porcentaje",
         "FechaPropuesta_SinFCP",
-        "FechaPropuesta_Final",        
+        "FechaPropuesta_Final",
         "FCP_SustitutivaDisponible"
-
-
     ]
 
     # =========================
-    # 18) Buscar stock de referencia sustitutiva inversa
-    # =========================
-
-    # =========================
-    # Buscar stock de referencias sustitutivas
-    # Directa e inversa
+    # 18) Buscar stock de referencias sustitutivas
+    # Directa e inversa, convirtiendo por CajasPaletProdClte
     # =========================
 
     df_cruce["ReferenciaSustitutivaUsada"] = ""
     df_cruce["TipoReferenciaSustitutiva"] = ""
+    df_cruce["CajasPalet_Sustitutiva"] = 0.0
     df_cruce["FCP_SustitutivaDisponible"] = pd.NaT
-    df_cruce["Stock_SustitutivaDisponible"] = 0
+    df_cruce["StockPalets_SustitutivaDisponible"] = 0.0
+    df_cruce["StockCajas_SustitutivaDisponible"] = 0.0
+    df_cruce["Resultado_Sustitutiva"] = ""
 
-    # Normalizar por seguridad
+    # Por si quedó de pruebas anteriores
+    df_cruce = df_cruce.drop(
+        columns=["CajasPaletProdClte_Sustitutiva"],
+        errors="ignore"
+)
+
+    df_cruce["CajasPalet_Sustitutiva"] = df_cruce["CajasPalet_Sustitutiva"].astype(float)
+    df_cruce["StockPalets_SustitutivaDisponible"] = df_cruce["StockPalets_SustitutivaDisponible"].astype(float)
+    df_cruce["StockCajas_SustitutivaDisponible"] = df_cruce["StockCajas_SustitutivaDisponible"].astype(float)
+
+    # Normalizar columnas de sustitutivos
     for col in ["ReferenciaSustitutiva", "ReferenciaSustitutivaInversa"]:
         if col in df_cruce.columns:
             df_cruce[col] = (
@@ -838,28 +919,35 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
                 .str.replace(r"\.0$", "", regex=True)
             )
 
+    # Diccionario Referencia -> CajasPaletProdClte
+    dict_cajas_palet = (
+        df_factor_cajas
+        .set_index("Referencia")["CajasPaletProdClte"]
+        .to_dict()
+    )
+
     for idx, fila in df_cruce.iterrows():
 
-        # Fecha requerida para comparar la alternativa
-        # Prioridad:
-        # 1. FCP Exactamente igual
-        # 2. FCP Mayor o igual
-        # 3. Fecha calculada por porcentaje
-        # 4. FechaCaducidadCalculada
-        # 5. Sin fecha, buscar más antigua
-        if pd.notna(fila.get("FCP Exactamente igual")):
+        # Solo intentamos cubrir con sustitutivo si la línea ha quedado en rotura
+        if fila.get("Resultado_Final") != "Rotura!":
+            continue
+
+        cantidad_cajas = fila.get("Palets", 0)
+
+        # Fecha requerida según criterio aplicado
+        criterio = str(fila.get("CriterioAplicado", "")).strip()
+
+        if criterio == "FCP Exactamente igual":
             fecha_requerida = fila.get("FCP Exactamente igual")
 
-        elif pd.notna(fila.get("FCP Mayor o igual")):
+        elif criterio == "FCP Mayor o igual":
             fecha_requerida = fila.get("FCP Mayor o igual")
 
-        elif pd.notna(fila.get("FechaCaducidadSegunPorcentaje")):
+        elif criterio == "FCP según % vida útil":
             fecha_requerida = fila.get("FechaCaducidadSegunPorcentaje")
 
-        elif pd.notna(fila.get("FechaCaducidadCalculada")):
-            fecha_requerida = fila.get("FechaCaducidadCalculada")
-
         else:
+            # Sin FCP, buscar desde la fecha más antigua
             fecha_requerida = pd.NaT
 
         referencias_a_probar = []
@@ -873,60 +961,87 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
         if ref_sustitutiva_inversa != "":
             referencias_a_probar.append(("Inversa", ref_sustitutiva_inversa))
 
+        mejor_fecha = pd.NaT
+        mejor_stock_palets = 0
+        mejor_stock_cajas = 0
+        mejor_ref = ""
+        mejor_tipo = ""
+        mejor_cajas_palet = 0
+
         for tipo_ref, referencia_alt in referencias_a_probar:
 
-            fecha_alt, stock_alt = buscar_stock_referencia_alternativa(
+            cajas_palet_alt = dict_cajas_palet.get(str(referencia_alt).strip(), 1)
+
+            cajas_palet_alt = pd.to_numeric(cajas_palet_alt, errors="coerce")
+
+            if pd.isna(cajas_palet_alt) or cajas_palet_alt <= 0:
+                cajas_palet_alt = 1
+
+            fecha_alt, stock_palets_alt, stock_cajas_alt, estado_alt = consumir_stock_alternativo_por_cajas(
                 stock_virtual,
                 referencia_alt,
-                fecha_requerida
+                fecha_requerida,
+                cantidad_cajas,
+                cajas_palet_alt
             )
 
-            if pd.notna(fecha_alt) and stock_alt > 0:
+            # Guardamos el mejor dato informativo aunque no cubra
+            if stock_cajas_alt > mejor_stock_cajas:
+                mejor_fecha = fecha_alt
+                mejor_stock_palets = stock_palets_alt
+                mejor_stock_cajas = stock_cajas_alt
+                mejor_ref = referencia_alt
+                mejor_tipo = tipo_ref
+                mejor_cajas_palet = cajas_palet_alt
+
+            # Si cubre, quitamos la rotura
+            if estado_alt == "OK":
 
                 df_cruce.loc[idx, "ReferenciaSustitutivaUsada"] = referencia_alt
                 df_cruce.loc[idx, "TipoReferenciaSustitutiva"] = tipo_ref
+                df_cruce.loc[idx, "CajasPalet_Sustitutiva"] = float(cajas_palet_alt)
                 df_cruce.loc[idx, "FCP_SustitutivaDisponible"] = fecha_alt
-                df_cruce.loc[idx, "Stock_SustitutivaDisponible"] = stock_alt
+                df_cruce.loc[idx, "StockPalets_SustitutivaDisponible"] = float(stock_palets_alt)
+                df_cruce.loc[idx, "StockCajas_SustitutivaDisponible"] = float(stock_cajas_alt)
+                df_cruce.loc[idx, "Resultado_Sustitutiva"] = "OK"
+
+                df_cruce.loc[idx, "Resultado_Final"] = "OK"
+                df_cruce.loc[idx, "CriterioAplicado"] = criterio + " + sustitutiva"
 
                 break
 
-    for idx, fila in df_cruce.iterrows():
+        # Si no cubre, dejamos trazabilidad del mejor sustitutivo encontrado
+            if (
+                df_cruce.loc[idx, "Resultado_Sustitutiva"] != "OK" #type:ignore
+                and mejor_ref != ""
+            ):
+                df_cruce.loc[idx, "ReferenciaSustitutivaUsada"] = mejor_ref
+                df_cruce.loc[idx, "TipoReferenciaSustitutiva"] = mejor_tipo
+                df_cruce.loc[idx, "CajasPalet_Sustitutiva"] = float(mejor_cajas_palet)
+                df_cruce.loc[idx, "FCP_SustitutivaDisponible"] = mejor_fecha
+                df_cruce.loc[idx, "StockPalets_SustitutivaDisponible"] = float(mejor_stock_palets)
+                df_cruce.loc[idx, "StockCajas_SustitutivaDisponible"] = float(mejor_stock_cajas)
+                df_cruce.loc[idx, "Resultado_Sustitutiva"] = "Rotura!"
 
-        referencia_inversa = str(
-            fila.get("ReferenciaSustitutivaInversa", "")
-        ).strip()
 
-        if referencia_inversa == "":
-            continue
+    # =========================
+    # 19) Comprobar motivos rotura DESPUÉS de sustitutivos
+    # =========================
 
-        # Fecha requerida según el criterio aplicado
-        criterio = str(fila.get("CriterioAplicado", "")).strip()
+    df_cruce["MotivoRotura"] = ""
 
-        if criterio == "FCP Exactamente igual":
-            fecha_requerida = fila.get("FCP Exactamente igual")
+    df_cruce.loc[
+        df_cruce["Resultado_Final"] == "Rotura!",
+        "MotivoRotura"
+    ] = "Stock insuficiente"
 
-        elif criterio == "FCP Mayor o igual":
-            fecha_requerida = fila.get("FCP Mayor o igual")
 
-        elif criterio == "FCP según % vida útil":
-            fecha_requerida = fila.get("FechaCaducidadSegunPorcentaje")
-
-        else:
-            # Si no tiene FCP, buscamos desde la fecha más antigua
-            fecha_requerida = pd.NaT
-
-        fecha_inv, stock_inv = buscar_stock_referencia_inversa(
-            stock_virtual,
-            referencia_inversa,
-            fecha_requerida
-        )
-
-        df_cruce.loc[idx, "FCP_SustitutivaInversa"] = fecha_inv
-        df_cruce.loc[idx, "Stock_SustitutivaInversa"] = stock_inv
+    # =========================
+    # 20) Crear df_export para ordenar y exportar
+    # =========================
 
     df_export = df_cruce.copy()
-
-    
+        
     # =========================
     # Ordenar por Fecha de Carga
     # Primero vacíos, luego de anterior a posterior
@@ -983,16 +1098,82 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
 
     with pd.ExcelWriter(output_file, engine="xlsxwriter") as writer:
 
-        df_export.to_excel(writer, index=False, sheet_name="Datos")
+        # =========================
+        # Crear pestaña Faltas
+        # Solo líneas con MotivoRotura informado
+        # =========================
+
+        if "MotivoRotura" in df_export.columns:
+            df_faltas = df_export[
+                df_export["MotivoRotura"].fillna("").astype(str).str.strip() != ""
+            ].copy()
+        else:
+            df_faltas = pd.DataFrame()
+
+        if not df_faltas.empty:
+
+            if almacen == 221:
+                almacen_txt = "Steel"
+            elif almacen == 129:
+                almacen_txt = "GXO Alovera1"
+            else:
+                almacen_txt = str(almacen)
+
+            df_faltas_salida = pd.DataFrame({
+                "FECHA CARGA": df_faltas.get("Fecha de Carga", ""),
+                "ALMACEN": almacen_txt,
+                "Nº PEDIDO": df_faltas.get("Albarán", ""),
+                "RAZÓN SOCIAL": df_faltas.get("Razón Social", ""),
+                "REF": df_faltas.get("Referencia", ""),
+                "DESCRIPCIÓN": df_faltas.get("Descripción", ""),
+                "CANTIDAD": df_faltas.get("Palets", ""),
+                "UNIDAD": df_faltas.get("CodigoUnidad", ""),
+                "INCIDENCIA": df_faltas.get("MotivoRotura", "")
+            })
+
+        else:
+
+            df_faltas_salida = pd.DataFrame(columns=[
+                "FECHA CARGA",
+                "ALMACEN",
+                "Nº PEDIDO",
+                "RAZÓN SOCIAL",
+                "REF",
+                "DESCRIPCIÓN",
+                "CANTIDAD",
+                "UNIDAD",
+                "INCIDENCIA"
+            ])
+
+        # =========================
+        # Escribir hojas
+        # =========================
+
+        df_export.to_excel(
+            writer,
+            index=False,
+            sheet_name="Datos"
+        )
+
+        df_faltas_salida.to_excel(
+            writer,
+            index=False,
+            sheet_name="Faltas"
+        )
 
         workbook = writer.book
-        worksheet = writer.sheets["Datos"]
+        worksheet_datos = writer.sheets["Datos"]
+        worksheet_faltas = writer.sheets["Faltas"]
+
+        # ==========================
+        # FORMATOS
+        # ==========================
 
         formato_rotura = workbook.add_format({
             "bg_color": "#FF9999"
         })
 
-        formato_fecha_borde = workbook.add_format({            
+        formato_linea_borde_rojo = workbook.add_format({
             "top": 2,
             "bottom": 2,
             "left": 2,
@@ -1001,8 +1182,18 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
             "bottom_color": "red",
             "left_color": "red",
             "right_color": "red"
-            })
+        })
 
+        formato_cabecera_faltas = workbook.add_format({
+            "bold": True,
+            "bg_color": "#1F4E78",
+            "font_color": "white",
+            "border": 1
+        })
+
+        # ==========================
+        # FORMATO HOJA DATOS
+        # ==========================
 
         columnas = {
             col: idx
@@ -1016,28 +1207,25 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
         # Fila completa roja si hay Rotura!
         # ==========================
 
-        for col_resultado in [
-        "Resultado_Final"
-        ]:
-            if col_resultado in columnas:
+        if "Resultado_Final" in columnas:
 
-                col_idx = columnas[col_resultado]
-                col_excel = xl_col_to_name(col_idx)
+            col_idx = columnas["Resultado_Final"]
+            col_excel = xl_col_to_name(col_idx)
 
-                worksheet.conditional_format(
-                    1,
-                    0,
-                    ultima_fila,
-                    ultima_columna,
-                    {
-                        "type": "formula",
-                        "criteria": f'=${col_excel}2="Rotura!"',
-                        "format": formato_rotura
-                    }
-                )
+            worksheet_datos.conditional_format(
+                1,
+                0,
+                ultima_fila,
+                ultima_columna,
+                {
+                    "type": "formula",
+                    "criteria": f'=${col_excel}2="Rotura!"',
+                    "format": formato_rotura
+                }
+            )
 
         # ==========================
-        # Bordes rojos en línea completa SOLO si:
+        # Bordes rojos en Datos solo si:
         # - El cliente ha informado FCP
         # - Y la fecha propuesta es distinta
         # ==========================
@@ -1046,7 +1234,6 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
             valor = str(valor).strip()
             return valor not in ["", "nan", "NaT", "None"]
 
-
         for idx, fila in df_export.iterrows():
 
             fila_excel = idx + 1  # type: ignore fila 0 son cabeceras
@@ -1054,9 +1241,7 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
 
             criterio = str(fila.get("CriterioAplicado", "")).strip()
 
-            # ==========================
             # FCP Mayor o igual
-            # ==========================
             if criterio == "FCP Mayor o igual":
 
                 fcp_cliente = fila.get("FCP Mayor o igual", "")
@@ -1069,9 +1254,7 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
                 ):
                     marcar_borde = True
 
-            # ==========================
             # FCP Exactamente igual
-            # ==========================
             elif criterio == "FCP Exactamente igual":
 
                 fcp_cliente = fila.get("FCP Exactamente igual", "")
@@ -1084,9 +1267,7 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
                 ):
                     marcar_borde = True
 
-            # ==========================
             # FCP según % vida útil
-            # ==========================
             elif criterio == "FCP según % vida útil":
 
                 fcp_calculada = fila.get("FechaCaducidadSegunPorcentaje", "")
@@ -1099,21 +1280,17 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
                 ):
                     marcar_borde = True
 
-            # ==========================
-            # Si es Sin FCP, NO marcamos borde
-            # ==========================
-            # criterio == "Sin FCP - fecha más antigua" -> sin borde
-
+            # Sin FCP no se marca borde rojo
             if marcar_borde:
                 marcar_fila_borde_rojo(
-                    worksheet,
+                    worksheet_datos,
                     fila_excel,
                     ultima_columna,
-                    formato_fecha_borde
+                    formato_linea_borde_rojo
                 )
 
         # ==========================
-        # Autoajustar columnas
+        # Autoajustar columnas Datos
         # ==========================
 
         for i, col in enumerate(df_export.columns):
@@ -1132,7 +1309,37 @@ def cruce_archivos(archivo_pedidos, archivo_fcp, archivo_stock, almacen):
             except Exception:
                 ancho = len(str(col)) + 2
 
-            worksheet.set_column(i, i, min(ancho, 50))
+            worksheet_datos.set_column(i, i, min(ancho, 50))
+
+        # ==========================
+        # FORMATO HOJA FALTAS
+        # ==========================
+
+        for col_num, value in enumerate(df_faltas_salida.columns):
+            worksheet_faltas.write(
+                0,
+                col_num,
+                value,
+                formato_cabecera_faltas
+            )
+
+        for i, col in enumerate(df_faltas_salida.columns):
+
+            try:
+                ancho_datos = (
+                    df_faltas_salida[col]
+                    .fillna("")
+                    .astype(str)
+                    .str.len()
+                    .max()
+                )
+
+                ancho = max(len(str(col)), ancho_datos) + 2
+
+            except Exception:
+                ancho = len(str(col)) + 2
+
+            worksheet_faltas.set_column(i, i, min(ancho, 50))
 
     print("OK ->", output_file)
 
