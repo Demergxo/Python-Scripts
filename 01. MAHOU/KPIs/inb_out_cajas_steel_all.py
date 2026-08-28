@@ -9,8 +9,8 @@ DB_FILE = f"{path}\\apoyo.db"
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_all_cajas_steel"
-fecha_inicio = '2026-01-01'
-fecha_fin = '2026-06-30'
+fecha_inicio = '2026-06-27'
+fecha_fin = '2026-07-31'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")

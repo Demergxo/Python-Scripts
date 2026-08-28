@@ -77,7 +77,7 @@ def mostrar_resultados(dispositivos, ips_libres):
 
 if __name__ == "__main__":
     # Dirección de red y modificador de bytes
-    direccion_red = "10.59.129.0"
+    direccion_red = "10.59.104.0"
     modificador = 24
     
     # Escanear la red

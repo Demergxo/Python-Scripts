@@ -8,7 +8,8 @@ fecha_fin = '2026-06-22'
 
 path = os.getcwd()
 DB_FILE = f"{path}\\apoyo.db"
-EXCEL_ALBARANES = r"C:\Users\jgmeras\OneDrive - GXO\Escritorio\Archivo_muestra.xlsx"
+USER = os.getenv("USERNAME")
+EXCEL_ALBARANES = f"C:\\Users\\{USER}\\OneDrive - GXO\\Escritorio\\Archivo_muestra.xlsx"
 
 def cargar_albaranes_excel(ruta_excel):
     """
@@ -109,13 +110,13 @@ def consulta_pedidos(fecha_inicio, fecha_fin, ruta_excel):
         WHERE
             ID_Cliente = 944
             AND ID_Almacen = 221
-            AND CodigoDivisionCliente = '1084'            
-            AND CodigoTipoDocumento IN ('RS', 'ALB')
+                        
+            AND CodigoTipoDocumento IN ('RS', 'ALB', 'AJU')
             AND RTRIM(AlbaranDoc) IN :albaranes;
     """)
     .bindparams(bindparam("albaranes", expanding=True))
 )
-
+#AND CodigoDivisionCliente = '1084'
     q2 = text("""
         SELECT
             RTRIM(AlbaranDoc) AS Albarán,
@@ -125,10 +126,10 @@ def consulta_pedidos(fecha_inicio, fecha_fin, ruta_excel):
             ID_Cliente = 944
             AND ID_Almacen = 221
             AND ID_DivisionCliente = '1866'
-            AND (ID_TipoDocumento = 1 OR ID_TipoDocumento = 3)
+            
             AND CONVERT(date, FechaTeoricaCargaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin);
     """)
-
+#AND (ID_TipoDocumento = 1 OR ID_TipoDocumento = 3)
     q3 = text("""
         SELECT
             RTRIM(AlbaranDoc) AS Albarán,

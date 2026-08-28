@@ -5,8 +5,8 @@ from datetime import datetime
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "vDocumentos"
 
-fecha_inicio = '2026-07-01'
-fecha_fin = '2026-07-13'
+fecha_inicio = '2026-08-17'
+fecha_fin = '2026-08-26'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -27,11 +27,15 @@ query = text(f"""
     WHERE
         ID_Cliente = 944
         AND ID_Almacen = 221
-        AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin) 
-        
-        
-        
+        AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
+        AND CodigoTipoDocumento = 'ALB'
+   
 """)
+
+# WHERE
+#         ID_Cliente = 944
+#         AND ID_Almacen = 221
+#         AND CONVERT(date, FechaProcesoDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
 
 query2 = text(f"""
     SELECT OBJECT_DEFINITION(OBJECT_ID('dbo.{ddbb_name}')) AS Definicion
@@ -92,6 +96,7 @@ query_permiso = text("""
 #     ID_Cliente = 847 (Hisense)  
 #     AND ID_Almacen = 129 (Interim)
 #     AND ID_Almacen = 221 (Steel)
+#     AND ID_Almacen = 222 (Burgos)
 #     ID_Cliente = 950 (Kimberly Klark)
 #     AND ID_Deposito = 258
 #     AND TipoMvtoPalet = 'S'

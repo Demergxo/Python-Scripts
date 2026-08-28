@@ -2,6 +2,8 @@ import qry_pedidos_final_steel
 import descarga_edi_steel
 import qry_consulta_UBSPROD
 import cruce_pedidos
+import view_1_order
+import fcp_pedidos_excel
 
 import os
 import pandas as pd
@@ -240,9 +242,11 @@ def selector_tarea():
         print("       (2) Revisar un código")
         print("       (3) Actualizar un código")
         print("       (4) Actualizar todo el maestro")
-        print("       (5) Salir")
+        print("       (5) Comprobar FCP de un pedido")
+        print("       (6) Comprobar FCP a traves del excel")
+        print("       (7) Salir")
 
-        opcion = input("\n(1) - (5): ").strip()
+        opcion = input("\n(1) - (7): ").strip()
 
         if opcion == "1":
             fichero_faltas()
@@ -261,11 +265,28 @@ def selector_tarea():
             esperar_enter()
 
         elif opcion == "5":
+            comprobar_1_fcp()
+            esperar_enter()
+
+        elif opcion == "6":
+            leer_excel_muestra()
+            esperar_enter()
+        
+
+        elif opcion == "7":
             print("\n"+ "*"*50 +"\nSaliendo del programa...\n"+ "*"*50 + "\n")
             break
 
         else:
-            print("\nOpción incorrecta, escoja 1 a 5")
+            print("\nOpción incorrecta, escoja 1 a 7")
+
+def comprobar_1_fcp():
+    pedido = input("\nIntroduce el número de pedido: ")
+    
+    view_1_order.inspect_edi(pedido)
+
+def leer_excel_muestra():
+    fcp_pedidos_excel.procesar_archivo_muestra()
 
 def leer_csv(ruta_archivo):
     """

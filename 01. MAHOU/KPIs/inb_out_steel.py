@@ -4,8 +4,8 @@ from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_inb_out_steel"
-fecha_inicio = '2026-01-01'
-fecha_fin = '2026-06-30'
+fecha_inicio = '2026-06-27'
+fecha_fin = '2026-07-31'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -52,9 +52,11 @@ def qry_inb_out(fecha_inicio, fecha_fin):
     ids_alb = (
         df_doc
         .loc[
-            df_doc["Movimiento"].str.strip().str.upper() == "ALBARAN", "ID_Doc"]
+            df_doc["Movimiento"].str.strip().str.upper() == "ALBARAN",
+            "ID_Doc"
+        ]
         .dropna()
-        .astype(str)
+        .astype(int)
         .unique()
         .tolist()
     )
@@ -62,27 +64,43 @@ def qry_inb_out(fecha_inicio, fecha_fin):
         if col in df_doc.columns:
             df_doc[col] = pd.to_datetime(df_doc[col], errors='coerce').dt.strftime("%d/%m/%Y").fillna("")
 
-    #Query acotada a ID_Doc necesarios
+    # --- SEGUNDA CONSULTA POR BLOQUES (evita límite 2100 parámetros SQL Server) ---
 
-    placeholders = ", ".join([f":id{i}" for i in range(len(ids_alb))])
+    CHUNK_SIZE = 2000
 
-    query_palets = text(f"""
-        SELECT
-            ID_Doc,
-            CEILING(TotalPalets) AS Palets_Teoricos
-        FROM
-            vDocumentosPaletsTeoricos
-        WHERE
-            ID_Cliente = 944
-            AND ID_Doc IN ({placeholders})
-    """)
-
-
-    # --- EJECUTAR  SEGUNDA CONSULTA CONSULTA ---
+    dfs_palets = []
 
     with engine.connect() as conn:
-        df_palets = pd.read_sql(query_palets, conn, params = {f"id{i}": v for i, v in enumerate(ids_alb)}
-        )
+
+        for inicio in range(0, len(ids_alb), CHUNK_SIZE):
+
+            ids_chunk = ids_alb[inicio:inicio + CHUNK_SIZE]
+
+            placeholders = ", ".join(
+                [f":id{i}" for i in range(len(ids_chunk))]
+            )
+
+            query_palets = text(f"""
+                SELECT
+                    ID_Doc,
+                    CEILING(TotalPalets) AS Palets_Teoricos
+                FROM
+                    vDocumentosPaletsTeoricos
+                WHERE
+                    ID_Cliente = 944
+                    AND ID_Doc IN ({placeholders})
+            """)
+
+            params = {
+                f"id{i}": v
+                for i, v in enumerate(ids_chunk)
+            }
+
+            dfs_palets.append(
+                pd.read_sql(query_palets, conn, params=params)
+            )
+
+    df_palets = pd.concat(dfs_palets, ignore_index=True)
 
     #HACEMOS MERGE DE LAS DOS CONSULTAS
 
