@@ -316,19 +316,68 @@ def revisar_codigo():
     codigo = str(input("\nIntroducir código a buscar: "))
 
     engine_sqlite = create_engine(f"sqlite:///{DB_FILE}")
-    query = text("""SELECT 
-                        CodigoProdClte AS [Referencia], NombreProdClte AS [Descripcion], PesoBrutoProdClte AS [Peso],
-                        VolumenBrutoProdClte AS [Volumen], CASE WHEN ConvertirPaletACajaProdClte = 1 THEN 'SI' ELSE 'NO'END AS [Hijo], CodigoUnidad AS [Tipo],
-                         CajasPaletProdClte AS [Cajas Palet], AltoPaletProdClte AS [Alto Palet], AnchoPaletProdClte AS [Ancho Palet], LargoPaletProdClte AS [Largo Palet],
-                        CapasPaletProdClte AS [Capas Palet],DiasFechaProdClte AS [Días Prod(Corto)], DiasCaducidadProdClte AS [Días Caducidad(Largo)]
-                    FROM
-                        maestro_msm
-                    WHERE
-                        TRIM(CodigoProdClte) = TRIM(:codigo)
-                 
-                 """)
+    query = """
+    SELECT
+        m.CodigoProdClte AS [Referencia],
+        m.NombreProdClte AS [Descripcion],
+        m.PesoBrutoProdClte AS [Peso],
+        m.VolumenBrutoProdClte AS [Volumen],
 
-    df_maestro = pd.read_sql(query, engine_sqlite, params={"codigo": codigo})
+        CASE
+            WHEN m.ConvertirPaletACajaProdClte = 1 THEN 'SI'
+            ELSE 'NO'
+        END AS [Hijo],
+
+        m.CodigoUnidad AS [Tipo],
+        m.CajasPaletProdClte AS [Cajas Palet],
+        m.AltoPaletProdClte AS [Alto Palet],
+        m.AnchoPaletProdClte AS [Ancho Palet],
+        m.LargoPaletProdClte AS [Largo Palet],
+        m.CapasPaletProdClte AS [Capas Palet],
+        m.DiasFechaProdClte AS [Días Prod(Corto)],
+        m.DiasCaducidadProdClte AS [Días Caducidad(Largo)],
+
+        CASE
+            /* Es hijo: buscamos qué referencias apuntan a su ID interno */
+            WHEN m.ConvertirPaletACajaProdClte = 1 THEN
+                (
+                    SELECT REPLACE(
+                        GROUP_CONCAT(
+                            DISTINCT TRIM(p.CodigoProdClte)
+                        ),
+                        ',',
+                        ', '
+                    )
+                    FROM maestro_msm AS p
+                    WHERE p.ID_ProdClteSustitutivo = m.ID_ProdClte
+                )
+
+            /* Es padre: buscamos el ID interno indicado como sustitutivo */
+            ELSE
+                (
+                    SELECT TRIM(h.CodigoProdClte)
+                    FROM maestro_msm AS h
+                    WHERE h.ID_ProdClte = m.ID_ProdClteSustitutivo
+                    LIMIT 1
+                )
+        END AS [Ref Linkada],
+
+        CASE
+            WHEN m.ConvertirPaletACajaProdClte = 1
+                THEN 'Hijo a padre'
+            WHEN m.ID_ProdClteSustitutivo IS NOT NULL
+                THEN 'Padre a hijo'
+            ELSE
+                'Sin relación'
+        END AS [Tipo Relacion]
+
+    FROM maestro_msm AS m
+
+    WHERE TRIM(CAST(m.CodigoProdClte AS TEXT)) =
+          TRIM(CAST(:codigo AS TEXT))
+"""
+
+    df_maestro = pd.read_sql(query, engine_sqlite, params={"codigo": str(codigo).strip()})
     print("\n")
     
     imprimir_df_inteligente(df_maestro)

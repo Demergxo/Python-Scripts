@@ -5,8 +5,8 @@ from datetime import datetime
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "vDocumentos"
 
-fecha_inicio = '2026-08-17'
-fecha_fin = '2026-08-26'
+fecha_inicio = '2026-01-01'
+fecha_fin = '2026-09-06'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -27,8 +27,11 @@ query = text(f"""
     WHERE
         ID_Cliente = 944
         AND ID_Almacen = 221
-        AND CONVERT(date, FechaDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
-        AND CodigoTipoDocumento = 'ALB'
+        AND CONVERT(date, FechaProcesoDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
+
+
+        
+        
    
 """)
 

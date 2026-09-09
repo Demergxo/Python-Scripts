@@ -3,8 +3,8 @@ import pandas as pd
 import time
 import os
 
-fecha_inicio = '2026-06-19'
-fecha_fin = '2026-06-22'
+fecha_inicio = '2026-08-01'
+fecha_fin = '2026-08-31'
 
 path = os.getcwd()
 DB_FILE = f"{path}\\apoyo.db"
@@ -44,7 +44,7 @@ def cargar_albaranes_excel(ruta_excel):
         raise ValueError(
             "No se encontró una columna de albaranes en el Excel. "
             "La columna debe llamarse 'Albarán', 'Albaran' o 'AlbaranDoc'. "
-            f"Columnas encontradas: {df_excel.columns.tolist()}"
+            f"Columnas encontradas: {df_excel.columns.tolist()}" #type: ignore
         )
 
     albaranes = (
@@ -78,6 +78,10 @@ def clean_str(df, col):
         )
 
 def normalize_key(df, col):
+    if col not in df.columns:
+        print(f"AVISO: columna '{col}' no encontrada")
+        return
+
     df[col] = (
         df[col]
         .astype("string")
@@ -105,17 +109,18 @@ def consulta_pedidos(fecha_inicio, fecha_fin, ruta_excel):
             RTRIM(AlbaranDoc) AS Albarán,
             NombreDireccion AS [Razón Social],
             CampoCliente AS [Código Envio],
+            CodigoTipoDocumento AS [Código Tipo Documento],
             NombreTipoDocumento AS [Tipo Documento]
         FROM vDocumentos
         WHERE
             ID_Cliente = 944
             AND ID_Almacen = 221
-                        
-            AND CodigoTipoDocumento IN ('RS', 'ALB', 'AJU')
-            AND RTRIM(AlbaranDoc) IN :albaranes;
+            AND CodigoTipoDocumento IN ('RS', 'ALB', 'AJU', 'REC')
+            AND RTRIM(AlbaranDoc) IN :albaranes
     """)
     .bindparams(bindparam("albaranes", expanding=True))
-)
+    )
+
 #AND CodigoDivisionCliente = '1084'
     q2 = text("""
         SELECT
@@ -173,24 +178,65 @@ def consulta_pedidos(fecha_inicio, fecha_fin, ruta_excel):
     # Tipos
     df_123["Palets"] = pd.to_numeric(df_123["Palets"], errors="coerce")
 
-    # IDs de ALB (si no hay, no dispares query_4/5)
+    # IDs de documentos de tipo ALB
+    tipo_documento = (
+        df_123["Tipo Documento"]
+        .astype("string")
+        .fillna("")
+        .str.strip()
+        .str.upper()
+        .str.replace("Á", "A", regex=False)
+    )
+
     ids_alb = (
-        df_123.loc[df_123["Tipo Documento"].eq("Albaran"), "ID_Doc"]
-        .dropna()
-        .astype(str)
-        .unique()
+        df_123.loc[
+            tipo_documento.eq("ALBARAN"),
+            "ID_Doc"
+        ]
+        .astype("string")
+        .fillna("")
+        .str.strip()
+    )
+
+    ids_alb = (
+        ids_alb[ids_alb.ne("")]
+        .drop_duplicates()
         .tolist()
     )
 
+    print(f"IDs de albaranes encontrados: {len(ids_alb)}")
+
     # --- CONEXIÓN SQLITE (maestro_msm) ---
     engine_sqlite = create_engine(f"sqlite:///{DB_FILE}")
-    df_maestro = pd.read_sql("SELECT ID_ProdClte, CodigoProdClte FROM maestro_msm", engine_sqlite)
+    try:
+        df_maestro = pd.read_sql(
+            "SELECT ID_ProdClte, CodigoProdClte FROM maestro_msm",
+            engine_sqlite
+    )
+    except Exception as e:
+        print(f"Error leyendo maestro_msm: {e}")
 
-    df_maestro["ID_ProdClte"] = pd.to_numeric(df_maestro["ID_ProdClte"], errors="coerce").astype(str)
+        df_maestro = pd.DataFrame(
+            columns=[
+                "ID_ProdClte",
+                "CodigoProdClte"
+            ]
+    )
+
+    df_maestro["ID_ProdClte"] = (
+    pd.to_numeric(df_maestro["ID_ProdClte"], errors="coerce")
+        .astype("Int64")        # <-- clave: mata el ".0" del float
+        .astype("string")
+        .fillna("")
+        .str.strip()
+)
     df_maestro["CodigoProdClte"] = df_maestro["CodigoProdClte"].astype(str).str.strip()
     # df_maestro.to_csv("df_maestro.csv", index=False, sep=";", encoding="utf-8-sig")
 
     # ========== 1) df_123: añadimos ID_ProdClte a partir de Referencia ==========
+    if "Referencia" not in df_123.columns:
+        df_123["Referencia"] = ""
+
     df_123["Referencia"] = df_123["Referencia"].astype(str).str.strip()
     df_123 = df_123.merge(
         df_maestro.rename(columns={"CodigoProdClte": "Referencia"}),
@@ -202,7 +248,15 @@ def consulta_pedidos(fecha_inicio, fecha_fin, ruta_excel):
 
     # ========== 2) df4 y df5 ==========
     if not ids_alb:
-        df_45 = pd.DataFrame(columns=["ID_Doc", "ID_ProdClte", "CantidadTeorica", "FCP"])
+        df_45 = pd.DataFrame(
+                columns=[
+                    "ID_Doc",
+                    "ID_ProdClte",
+                    "Referencia",
+                    "CantidadTeorica",
+                    "FCP"
+                ]
+            )
     else:
         q4 = (
             text("""
@@ -233,9 +287,28 @@ def consulta_pedidos(fecha_inicio, fecha_fin, ruta_excel):
 
         with engine.connect() as conn:
             df4 = pd.read_sql(q4, conn, params={"ids": ids_alb}) #type: ignore
+            if "Referencia" not in df4.columns:
+                df4["Referencia"] = ""
+
+            if "Descripción" not in df4.columns:
+                df4["Descripción"] = ""
+            
             df5 = pd.read_sql(q5, conn, params={"ids": ids_alb}) #type: ignore
+            if "ID_ProdClte" not in df5.columns:
+                df5["ID_ProdClte"] = ""
+
+            if "FCP" not in df5.columns:
+                df5["FCP"] = pd.NaT
+
         df4["Referencia"] = df4["Referencia"].astype(str).str.strip()
-        df5["ID_ProdClte"] = df5["ID_ProdClte"].astype(str).str.strip()
+        df5["ID_ProdClte"] = (
+            pd.to_numeric(df5["ID_ProdClte"], errors="coerce")
+            .astype("Int64")
+            .astype("string")
+            .fillna("")
+            .str.strip()
+        )
+
         # df4.to_csv("df4.csv", index=False, sep=";", encoding="utf-8-sig")
         # df5.to_csv("df5.csv", index=False, sep=";", encoding="utf-8-sig")
         #print("df4 ref unicas:", df4["Referencia"].nunique())
@@ -274,6 +347,11 @@ def consulta_pedidos(fecha_inicio, fecha_fin, ruta_excel):
 
 
     # ========== 3) Merge final df_123 + df_45 por (ID_Doc, ID_ProdClte) ==========
+    for col in ["ID_Doc", "Referencia", "Descripción", "CantidadTeorica", "FCP"]:
+        if col not in df_45.columns:
+            df_45[col] = pd.NA
+
+
     df_final = df_123.merge(
     df_45[["ID_Doc", "Referencia", "Descripción", "CantidadTeorica", "FCP"]],
     on=["ID_Doc", "Referencia"],

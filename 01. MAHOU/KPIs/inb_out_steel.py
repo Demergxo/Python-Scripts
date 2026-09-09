@@ -4,8 +4,8 @@ from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_inb_out_steel"
-fecha_inicio = '2026-06-27'
-fecha_fin = '2026-07-31'
+fecha_inicio = '2026-08-01'
+fecha_fin = '2026-08-31'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")

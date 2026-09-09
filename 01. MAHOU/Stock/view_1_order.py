@@ -474,8 +474,8 @@ def extract_segments(edi_text):
         if pia:
             referencia = pia.group(1).strip()
 
-        # Mantenemos la misma lógica del script original, pero mostrando
-        # también el valor asociado para que la consulta sea más útil.
+        # Expresiones regulares para filtrar
+        
         dtm264 = re.search(r"DTM\+264:(\d{8})", bloque)
         dtm267 = re.search(r"DTM\+267:(\d{8})", bloque)
         rff_fcp = re.search(r"RFF\+FCP:([^']+)", bloque)

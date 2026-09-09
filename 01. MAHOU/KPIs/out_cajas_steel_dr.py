@@ -6,46 +6,24 @@ import os
 
 path = os.getcwd()
 DB_FILE = f"{path}\\apoyo.db"
-usuario = os.environ['USERNAME']
-
-archive = f"C:\\Users\\{usuario}\\OneDrive - GXO\\Escritorio\\KPIS Transporte MSM.xlsx"
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "KPIS_inb_out_cajas_ltl_steel"
-fecha_inicio = '2026-08-01'
+ddbb_name = "DR_cajas_steel"
+fecha_inicio = '2026-01-01'
 fecha_fin = '2026-08-31'
-
-def chunks(lst, n):
-    for i in range(0, len(lst), n):
-        yield lst[i:i+n]
-
-def leer_excel(archivo):
-    df = pd.read_excel(archivo,
-    usecols = ["Fecha Expedición", "Tipo Doc", "Nº Documento", "On Time", "Incidencia", "Cantidad de Artículos", "Motivo retrasos", "Responsable"]
-    )
-    #df_filtrado = df[df["Tipo Doc"] != "REC"]
-    df_filtrado = df[~df["Tipo Doc"].isin(["REC", "DEV"])]
-    df_filtrado = df_filtrado.rename(columns={"Nº Documento": "AlbaranDoc"})
-    df_filtrado["AlbaranDoc"] = df_filtrado["AlbaranDoc"].astype(str).str.strip()
-    
-    return df_filtrado
-    #print(df_filtrado)
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
     return hora
 
-def qry_inb_out_ltl():
+def qry_inb_out(fecha_inicio, fecha_fin):
+    path = os.getcwd()
+    DB_FILE = f"{path}\\apoyo.db"
+
+    date = datetime.now().strftime("%Y%m%d%H%M%S")
+    ddbb_name = "DR_cajas_steel"
 
     print(f"Hora de inicio: {hora()}")
-    df_xlsx = leer_excel(archive)
-
-    list_alb = df_xlsx["AlbaranDoc"].tolist()
-    if not list_alb:
-        print("⚠️ No se encontraron albaranes en el archivo")
-        return
-    
-    placeholders_1 = ", ".join([f"'{i}'" for i in list_alb])
 
     # --- CONEXIÓN SQLALCHEMY ---
 
@@ -53,17 +31,18 @@ def qry_inb_out_ltl():
 
     # --- QUERY SQL (rango de fechas) ---
 
-    query_docs = text(f"""
+    query_docs = text("""
         SELECT
-            ID_Doc, AlbaranDoc, PesoFiege
+            ID_Doc, FechaProcesoDoc AS 'Fecha', AlbaranDoc AS 'Documento', PesoFiege AS 'Peso', ObsEstado
         FROM
             vDocumentos
         WHERE
             ID_Cliente = 944
             AND ID_Almacen = 221
-            AND CodigoTipoDocumento = 'ALB'
-            AND AlbaranDoc IN ({placeholders_1})
-            
+            AND CodigoTipoDocumento = 'REC'
+            AND CodigoTipoEstado = '130'
+            AND CONVERT(date, FechaProcesoDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
+
     """)
 
     
@@ -72,54 +51,61 @@ def qry_inb_out_ltl():
 
     # ---Ejecutamos la primera consulta ---
     with engine.connect() as conn:
-        df_doc = pd.read_sql(query_docs, conn, params={f"id{i}": v for i, v in enumerate(list_alb)})
+        df_doc = pd.read_sql(query_docs, conn, params={"inicio": fecha_inicio, "fin": fecha_fin})
 
         # Normalizamos columnas clave
-    df_doc["AlbaranDoc"] = df_doc["AlbaranDoc"].str.strip()
-    df_doc = df_doc.merge(
-            df_xlsx,
-            on="AlbaranDoc",
-            how="left"
-    )
-        
+    df_doc["Documento"] = df_doc["Documento"].str.strip()
+    for col in ["Fecha"]:
+        if col in df_doc.columns:
+            df_doc[col] = pd.to_datetime(df_doc[col], errors='coerce').dt.strftime("%d/%m/%Y").fillna("")
+    
+    
     list_ids = df_doc["ID_Doc"].tolist()
+    print(len(list_ids))
 
     #Query acotada a ID_Doc necesarios
     if not list_ids:
         print("⚠️ No se encontraron documentos en ese rango")
         return
 
-    dfs =[]
-
-    placeholders = ", ".join([f":id{i}" for i in range(len(list_ids))])
-
-    #Query acotada a ID_Doc necesarios
+    dfs = []
+    chunk_size = 1000
 
     with engine.connect() as conn:
-        for chunk in chunks(list_ids, 1000):
 
-            placeholders = ", ".join([f":id{i}" for i in range(len(chunk))])
+        for inicio in range(0, len(list_ids), chunk_size):
+
+            ids_chunk = list_ids[inicio:inicio + chunk_size]
+
+            placeholders = ", ".join(
+                [f":id{i}" for i in range(len(ids_chunk))]
+            )
 
             query_dos = text(f"""
                 SELECT
-                    ID_Doc, ID_ProdClte, CantidadLineaDoc, ID_IncidenciaLinea
+                    ID_Doc,
+                    ID_ProdClte as Referencia,
+                    CantidadLineaDoc,
+                    ID_IncidenciaLinea
                 FROM
                     vLineasDocumentos
                 WHERE
                     ID_Cliente = 944
                     AND ID_Almacen = 221
-                    AND TipoMovimientoLineaDoc = 'S'
+                    AND ID_DivisionCliente = 1866
                     AND ID_Doc IN ({placeholders})
             """)
 
-            params = {f"id{i}": v for i, v in enumerate(chunk)}
+            params = {
+                f"id{i}": v
+                for i, v in enumerate(ids_chunk)
+            }
 
-            df_chunk = pd.read_sql(query_dos, conn, params=params)
+            dfs.append(
+                pd.read_sql(query_dos, conn, params=params)
+            )
 
-            dfs.append(df_chunk)
-
-        df_palets = pd.concat(dfs, ignore_index=True)
-
+    df_palets = pd.concat(dfs, ignore_index=True)
     #HACEMOS MERGE DE LAS DOS CONSULTAS
     
     df = df_doc.merge(
@@ -128,13 +114,13 @@ def qry_inb_out_ltl():
         how="left"
     )
 
-    df["ID_ProdClte"] = pd.to_numeric(df["ID_ProdClte"], errors="coerce").fillna(0).astype(int).astype(str)
+    df["Referencia"] = pd.to_numeric(df["Referencia"], errors="coerce").fillna(0).astype(int).astype(str)
 
     # --- CONEXIÓN SQLITE (maestro_msm) ---
     engine_sqlite = create_engine(f"sqlite:///{DB_FILE}")
     df_maestro = pd.read_sql("""
         SELECT
-            ID_ProdClte, CodigoProdClte, CajasPaletProdClte, ID_ProdClteSustitutivo
+            ID_ProdClte, CodigoProdClte, CajasPaletProdClte, ID_ProdClteSustitutivo, CodigoUnidad
         FROM
         maestro_msm
                              
@@ -177,43 +163,39 @@ def qry_inb_out_ltl():
     df_maestro_final = df_maestro[[
         "ID_ProdClte",
         "Codigo_Final",
-        "Cajas_Final"
+        "Cajas_Final", 
+        "CodigoUnidad"
     ]].rename(columns={
         "Codigo_Final": "CodigoProdClte",
         "Cajas_Final": "CajasPaletProdClte"
     })
 
-    df["ID_ProdClte"] = df["ID_ProdClte"].astype(str).str.strip()
+    df["Referencia"] = df["Referencia"].astype(str).str.strip()
 
     df = df.merge(
-        df_maestro_final,
-        on="ID_ProdClte",
+        df_maestro_final.rename(columns={"ID_ProdClte": "Referencia"}),
+        on="Referencia",
         how="left"
     )
 
     df["CantidadLineaDoc"] = pd.to_numeric(df["CantidadLineaDoc"], errors="coerce")
     df["CajasPaletProdClte"] = pd.to_numeric(df["CajasPaletProdClte"], errors="coerce")
 
-    df["Cajas"] = df["CantidadLineaDoc"] * df["CajasPaletProdClte"]
-
-    df_group = df_group = (
-        df
-        .groupby(["AlbaranDoc", "Tipo Doc"], as_index=False)
-        .agg({
-            "Fecha Expedición": "first",
-            "On Time": "first",
-            "Cajas": "sum",
-            "PesoFiege": "sum",
-            "Cantidad de Artículos": "first",
-            "Incidencia": "first",
-            "Motivo retrasos": "first",
-            "Responsable": "first",
-            
-        })    )
     
+    df["CodigoUnidad"] = df["CodigoUnidad"].fillna("").astype(str).str.strip().str.upper()
+
+    df["Cajas"] = df["CantidadLineaDoc"]
+
+    mask_pl = df["CodigoUnidad"] == "PL"
+
+    df.loc[mask_pl, "Cajas"] = (
+        df.loc[mask_pl, "CantidadLineaDoc"] *
+        df.loc[mask_pl, "CajasPaletProdClte"]
+    )
+        
 
     nombre_archivo = f"{ddbb_name}_{date}.xlsx"
-    df_group.to_excel(nombre_archivo, index=False)
+    df.to_excel(nombre_archivo, index=False)
 
     print(f"✅ Archivo generado correctamente: {nombre_archivo}")
 
@@ -221,4 +203,4 @@ def qry_inb_out_ltl():
     engine.dispose()
 
 if __name__ == "__main__":
-    qry_inb_out_ltl()
+    qry_inb_out(fecha_inicio, fecha_fin)
