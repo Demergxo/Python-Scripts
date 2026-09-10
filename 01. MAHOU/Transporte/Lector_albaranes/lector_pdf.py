@@ -59,53 +59,60 @@ def suma_cantidad(pagina):
 
 datos = []
 
-for archivo in os.listdir(CARPETA_PDF):
-    if not archivo.lower().endswith(".pdf"):
-        continue
+for raiz, _, archivos in os.walk(CARPETA_PDF):
 
-    ruta_pdf = os.path.join(CARPETA_PDF, archivo)
+    for archivo in archivos:
 
-    try:
-        with pdfplumber.open(ruta_pdf) as pdf:
+        if not archivo.lower().endswith(".pdf"):
+            continue
 
-            # Cada hoja puede ser un albaran distinto
-            for num_pagina, pagina in enumerate(pdf.pages, start=1):
+        ruta_pdf = os.path.join(raiz, archivo)
 
-                texto = pagina.extract_text() or ""
+        try:
+            with pdfplumber.open(ruta_pdf) as pdf:
 
-                # Solo procesamos hojas que son albaran (descarta hojas GXO)
-                if "Pedido Cliente" not in texto or "Bultos" not in texto:
-                    continue
+                for num_pagina, pagina in enumerate(pdf.pages, start=1):
 
-                documento = None
-                pedido = None
-                bultos = None
+                    texto = pagina.extract_text() or ""
 
-                m = RE_DOC.search(texto)
-                if m:
-                    documento = m.group(1)[2:].strip()   # sin los 2 primeros caracteres
+                    if "Pedido Cliente" not in texto or "Bultos" not in texto:
+                        continue
 
-                m = RE_PEDIDO.search(texto)
-                if m:
-                    pedido = m.group(1)
+                    
 
-                m = RE_BULTOS.search(texto)
-                if m:
-                    bultos = m.group(1)
+                    documento = None
+                    pedido = None
+                    bultos = None
 
-                total_cantidad = suma_cantidad(pagina)
+                    m = RE_DOC.search(texto)
+                    if m:
+                        documento = m.group(1)[2:].strip()   # sin los 2 primeros caracteres
 
-                datos.append({
-                    "Archivo": archivo,
-                    "Pagina": num_pagina,
-                    "Documento": documento,
-                    "Pedido_Cliente": pedido,
-                    "Bultos": bultos,
-                    "Total_Cantidad": total_cantidad
-                })
+                    m = RE_PEDIDO.search(texto)
+                    if m:
+                        pedido = m.group(1)
 
-    except Exception as e:
-        print(f"Error en {archivo}: {e}")
+                    m = RE_BULTOS.search(texto)
+                    if m:
+                        bultos = m.group(1)
+
+                    total_cantidad = suma_cantidad(pagina)
+
+                        
+                    ruta_relativa = os.path.relpath(ruta_pdf, CARPETA_PDF)
+
+                    datos.append({
+                        "Ruta": ruta_relativa,
+                        "Archivo": archivo,
+                        "Pagina": num_pagina,
+                        "Documento": documento,
+                        "Pedido_Cliente": pedido,
+                        "Bultos": bultos,
+                        "Total_Cantidad": total_cantidad
+                    })
+
+        except Exception as e:
+            print(f"Error en {archivo}: {e}")
 
 df = pd.DataFrame(datos)
 df.to_csv(CSV_SALIDA, sep=";", index=False, encoding="utf-8-sig")
