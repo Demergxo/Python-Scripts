@@ -4,6 +4,7 @@ import qry_consulta_UBSPROD
 import cruce_pedidos
 import view_1_order
 import fcp_pedidos_excel
+import comprobar_muelles
 
 import os
 import pandas as pd
@@ -244,9 +245,11 @@ def selector_tarea():
         print("       (4) Actualizar todo el maestro")
         print("       (5) Comprobar FCP de un pedido")
         print("       (6) Comprobar FCP a traves del excel")
-        print("       (7) Salir")
+        print("       (7) Comprobar un DE especifico")
+        print("       (8) Comprobar todos los DE")
+        print("       (9) Salir")
 
-        opcion = input("\n(1) - (7): ").strip()
+        opcion = input("\n(1) - (9): ").strip()
 
         if opcion == "1":
             fichero_faltas()
@@ -271,9 +274,17 @@ def selector_tarea():
         elif opcion == "6":
             leer_excel_muestra()
             esperar_enter()
-        
 
         elif opcion == "7":
+            comprobar_un_muelle()
+            esperar_enter()
+
+        elif opcion == "8":
+            comprobar_todos_los_muelles()
+            esperar_enter()
+        
+
+        elif opcion == "9":
             print("\n"+ "*"*50 +"\nSaliendo del programa...\n"+ "*"*50 + "\n")
             break
 
@@ -301,7 +312,7 @@ def leer_csv(ruta_archivo):
         df = (
             df[df["Albarán"] != ""][["Albarán"]]
             .drop_duplicates()
-)
+        )
 
         #Eliminamos filas vacias y resetear índice
         df = df.dropna().reset_index(drop=True)
@@ -598,6 +609,13 @@ def fichero_faltas():
     print("Proceso completado".center(50, "-"))
     print("\n")
     print("=".center(50, "="))
+
+def comprobar_un_muelle():
+    comprobar_muelles.comprobar_1_muelle()
+
+def comprobar_todos_los_muelles():
+    comprobar_muelles.comprobar_todos_los_muelles()
+
 
 if __name__ == "__main__":
     try:
