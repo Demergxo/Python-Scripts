@@ -13,8 +13,8 @@ from datetime import datetime
 # -----------------------------------------------------------------------------
 DATE = datetime.now().strftime("%Y%m%d%H%M%S")
 DDBB_NAME = "KPIS_inb_out_steel"
-FECHA_INICIO = "2026-06-01"
-FECHA_FIN = "2026-08-31"
+FECHA_INICIO = "2026-09-01"
+FECHA_FIN = "2026-09-30"
 ALMACEN = 221
 CLIENTE = 944
 

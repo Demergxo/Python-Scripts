@@ -1,3 +1,5 @@
+from reports import views as report_views
+from mahou import views as mahou_views
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
@@ -15,6 +17,11 @@ def is_admin_group(user):
 admin_view =user_passes_test(is_admin_group)(admin.site.login)
 
 urlpatterns = [
+    path("mahou/", mahou_views.dashboard, name="mahou_dashboard"),
+    path("mahou/actualizar/", mahou_views.refresh, name="mahou_refresh"),
+    path("ejecuciones/", report_views.job_list, name="job_list"),
+    path("ejecuciones/<uuid:pk>/", report_views.job_detail, name="job_detail"),
+    path("ejecuciones/<uuid:pk>/<str:fmt>/", report_views.download, name="job_download"),
     path("admin/", admin.site.urls),
 
     path("login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"),

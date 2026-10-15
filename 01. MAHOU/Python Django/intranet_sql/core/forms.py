@@ -12,7 +12,7 @@ class QuerySelectForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["query"].queryset = Query.objects.filter(is_active=True).order_by("name") #type:ignore
+        self.fields["query"].queryset = Query.objects.filter(is_active=True).order_by("name")  # type: ignore
 
 
 def build_query_run_form(query: Query):
@@ -21,7 +21,7 @@ def build_query_run_form(query: Query):
     """
     fields = {}
 
-    for p in query.params.all(): #type:ignore
+    for p in query.params.all():  # type: ignore
         required = p.required
         label = p.label
         initial = p.default if p.default != "" else None
@@ -41,18 +41,22 @@ def build_query_run_form(query: Query):
                 widget=forms.DateInput(attrs={"type": "date"}),
             )
 
-        else: # STR
+        else:  # STR
             field = forms.CharField(required=required, label=label, initial=initial)
 
         fields[p.name] = field
 
     # clean cruzado (fecha_inicio <= fecha_fin)
     def clean(self):
-        cleaned = super(DynamicForm, self).clean() #type:ignore
-        fi = cleaned.get("fecha_inicio")
-        ff = cleaned.get("fecha_fin")
+        cleaned = super(DynamicForm, self).clean()  # type: ignore
+        names = {name.lower(): name for name in cleaned}
+        fi = cleaned.get(names.get("fecha_inicio", ""))
+        ff = cleaned.get(names.get("fecha_fin", ""))
         if fi is not None and ff is not None and fi > ff:
-            self.add_error("fecha_fin", "La fecha fin debe ser igual o posterior a la fecha inicio.")
+            self.add_error(
+                names["fecha_fin"],
+                "La fecha fin debe ser igual o posterior a la fecha inicio.",
+            )
         return cleaned
 
     DynamicForm = type(
@@ -61,7 +65,3 @@ def build_query_run_form(query: Query):
         {**fields, "clean": clean},
     )
     return DynamicForm
-
-
-
-        

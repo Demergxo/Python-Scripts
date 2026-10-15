@@ -1,0 +1,17 @@
+{% extends 'base_workspace.html' %}
+{% block title %}{{ job.query.code }} · {{ job.get_status_display }}{% endblock %}
+{% block extra_css %}{% if refresh %}<meta http-equiv="refresh" content="5">{% endif %}
+<style>table{border-collapse:collapse;background:white;width:100%;}td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left;}th{background:#ff3b00;color:white;} .scroll{overflow:auto;max-height:65vh;}pre{white-space:pre-wrap;}</style>{% endblock %}
+{% block content %}
+<h1>{{ job.query.name }}</h1>
+<p><strong>{{ job.get_status_display }}</strong> · Creada {{ job.created_at }} · {{ job.row_count }} filas</p>
+<p><a href="{% url 'job_list' %}">Mis ejecuciones</a> · <a href="{% url 'query_detail' job.query.code %}">Nueva consulta</a></p>
+{% if refresh %}<p>Esta página se actualiza cada cinco segundos. Puedes cerrarla y volver desde Mis ejecuciones.</p>{% endif %}
+{% if job.error %}<p>No se ha publicado un resultado para esta ejecución.</p>{% if show_error %}<pre>{{ job.error }}</pre>{% else %}<p>Comunica al administrador el identificador {{ job.pk }}.</p>{% endif %}{% endif %}
+{% if job.status == 'done' %}
+<p><a href="{% url 'job_download' job.pk 'csv' %}">Descargar CSV completo</a> · <a href="{% url 'job_download' job.pk 'xlsx' %}">Descargar Excel completo</a></p>
+<p>Finalizada {{ job.finished_at }}. Vista previa de las primeras 300 filas; los archivos contienen las {{ job.row_count }} filas.</p>
+<div class="scroll"><table><thead><tr>{% for col in cols %}<th>{{ col }}</th>{% endfor %}</tr></thead><tbody>{% for row in rows %}<tr>{% for cell in row %}<td>{{ cell|default_if_none:'—' }}</td>{% endfor %}</tr>{% empty %}<tr><td>No hay datos.</td></tr>{% endfor %}</tbody></table></div>
+{% endif %}
+{% if deliveries %}<h2>Envíos</h2><ul>{% for delivery in deliveries %}<li>{{ delivery.recipient }}: {{ delivery.get_status_display }}{% if show_error and delivery.error %} — {{ delivery.error }}{% endif %}</li>{% endfor %}</ul><p>“Aceptado por servidor” no confirma la entrega en el buzón.</p>{% endif %}
+{% endblock %}

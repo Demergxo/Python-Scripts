@@ -9,8 +9,8 @@ DB_FILE = f"{path}\\apoyo.db"
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_all_cajas_steel"
-fecha_inicio = '2026-08-01'
-fecha_fin = '2026-08-31'
+fecha_inicio = '2026-09-01'
+fecha_fin = '2026-09-30'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
@@ -23,14 +23,15 @@ def qry_inb_out(fecha_inicio, fecha_fin):
     date = datetime.now().strftime("%Y%m%d%H%M%S")
     ddbb_name = "KPIS_all_cajas_steel"
 
-    print(f"Hora de inicio: {hora()}")
+    print(f"[{hora()}] Inicio de proceso")
 
     # --- CONEXIÓN SQLALCHEMY ---
 
     engine = create_engine("mssql+pyodbc://@XGA_PROD")
-
+    print(f"[{hora()}] Conexión base de datos SQL")
     # --- QUERY SQL (rango de fechas) ---
 
+    print(f"[{hora()}] Ejecucion de primera query (vDocumentos)")
     query_docs = text("""
         SELECT
             ID_Doc, FechaProcesoDoc AS 'Fecha', AlbaranDoc AS 'Documento', PesoFiege AS 'Peso', ObsEstado
@@ -71,6 +72,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
     dfs = []
     chunk_size = 1000
 
+    print(f"[{hora()}] Ejecución de segunda query (vLineasDocumentos)")
     with engine.connect() as conn:
 
         for inicio in range(0, len(list_ids), chunk_size):
@@ -118,6 +120,7 @@ def qry_inb_out(fecha_inicio, fecha_fin):
 
     # --- CONEXIÓN SQLITE (maestro_msm) ---
     engine_sqlite = create_engine(f"sqlite:///{DB_FILE}")
+    print(f"[{hora()}] Conexión a sqlite y ejecución de tercera query")
     df_maestro = pd.read_sql("""
         SELECT
             ID_ProdClte, CodigoProdClte, CajasPaletProdClte, ID_ProdClteSustitutivo
@@ -182,13 +185,13 @@ def qry_inb_out(fecha_inicio, fecha_fin):
 
     df["Cajas"] = df["CantidadLineaDoc"] * df["CajasPaletProdClte"]
     
-
+    print(f"[{hora()}] Union de queys y preparación de archivo")
     nombre_archivo = f"{ddbb_name}_{date}.xlsx"
     df.to_excel(nombre_archivo, index=False)
 
-    print(f"✅ Archivo generado correctamente: {nombre_archivo}")
+    print(f"[{hora()}]✅ Archivo generado correctamente: {nombre_archivo}")
 
-    print(f"Hora de fin: {hora()}")
+    print(f"[{hora()}] Fin de proceso")
     engine.dispose()
 
 if __name__ == "__main__":

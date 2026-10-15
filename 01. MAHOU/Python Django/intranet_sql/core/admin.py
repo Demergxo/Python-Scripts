@@ -14,7 +14,7 @@ class QueryParamInline(admin.TabularInline):
 
 @admin.register(Query)
 class QueryAdmin(admin.ModelAdmin):
-    list_display = ("code", "name", "is_active")
+    list_display = ("code", "name", "database_alias", "is_active")
     search_fields = ("code", "name")
     list_filter = ("is_active", "category")
     inlines = [QueryParamInline]

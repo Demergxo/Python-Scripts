@@ -3,22 +3,24 @@ import pandas as pd
 from datetime import datetime
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
-ddbb_name = "vDocumentos"
+ddbb_name = "vRptEstadisticasManipulacion"
 
-fecha_inicio = '2026-06-01'
-fecha_fin = '2026-08-31'
+fecha_inicio = '2026-10-13'
+fecha_fin = '2026-10-13'
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")
     return hora
 
-print(f"Hora de inicio: {hora()}")
+print(f"[{hora()}] Inicio de ejecución") 
 
 # --- CONEXIÓN SQLALCHEMY ---
 
 engine = create_engine("mssql+pyodbc://@XGA_PROD")
+print(f"[{hora()}] Conexión base de datos SQL")
 
 # --- QUERY SQL (rango de fechas) ---
+print(f"[{hora()}] Ejecución de Query {ddbb_name} con rango de fechas {fecha_inicio} - {fecha_fin}")
 query = text(f"""
     SELECT
         *
@@ -27,11 +29,7 @@ query = text(f"""
     WHERE
         ID_Cliente = 944
         AND ID_Almacen = 221
-        AND CONVERT(date, FechaProcesoDoc) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)
-
-
-        
-        
+        AND CONVERT(date, FechaProcesoExtraccion) BETWEEN CONVERT(date, :inicio) AND CONVERT(date, :fin)        
    
 """)
 
@@ -79,6 +77,30 @@ query_permiso = text("""
             'OBJECT',
             'VIEW DEFINITION'
         ) AS TienePermisoViewDefinition
+""")
+
+query_consulta = text("""
+
+        SELECT
+    c.ORDINAL_POSITION,
+    c.COLUMN_NAME,
+    c.DATA_TYPE,
+    c.CHARACTER_MAXIMUM_LENGTH,
+    c.NUMERIC_PRECISION,
+    c.NUMERIC_SCALE,
+    c.IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS c
+WHERE c.TABLE_NAME = 'ProductosClientes'
+ORDER BY
+    c.ORDINAL_POSITION
+    """)
+
+query_consulta2 = text("""
+
+    SELECT
+    COUNT(*) AS NumeroRegistros
+FROM ProductosClientes
+WHERE ID_Cliente = 944
 """)
 
               
@@ -180,16 +202,18 @@ query_permiso = text("""
 
 # --- EJECUTAR CONSULTA ---
 with engine.connect() as conn:
-    df = pd.read_sql(query, conn, params={"inicio": fecha_inicio, "fin": fecha_fin} )
+    df = pd.read_sql(query_consulta2, conn, params={"inicio": fecha_inicio, "fin": fecha_fin} )
 #print(df)
 
 # --- EXPORTAR ---
-nombre_archivo = f"{ddbb_name}_{date}.xlsx"
+nombre_archivo = f"consulta2_{date}.xlsx"
+#nombre_archivo = f"{ddbb_name}_{date}.xlsx"
+print(f"[{hora()}] Generación de archivo")
 df.to_excel(nombre_archivo, index=False)
 
-print(f"✅ Archivo generado correctamente: {nombre_archivo}")
+print(f"[{hora()}] ✅ Archivo generado correctamente: {nombre_archivo}")
 
-print(f"Hora de fin: {hora()}")
+print(f"[{hora()}] Fin de ejecución")
 engine.dispose()
 
 

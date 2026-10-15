@@ -6,8 +6,8 @@ import os
 
 date = datetime.now().strftime("%Y%m%d%H%M%S")
 ddbb_name = "KPIS_roturas_stock_steel"
-fecha_inicio = '2026-08-01'
-fecha_fin = '2026-08-31' 
+fecha_inicio = '2026-09-01'
+fecha_fin = '2026-09-30' 
 
 def hora():
     hora = datetime.now().strftime("%H:%M:%S")

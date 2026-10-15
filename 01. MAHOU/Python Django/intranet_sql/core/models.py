@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import Group
 
+
 class QueryCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
     order = models.PositiveIntegerField(default=0)
@@ -24,7 +25,10 @@ class Query(models.Model):
     code = models.SlugField(max_length=64, unique=True)
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    sql = models.TextField(help_text="Usa placeholders '%s' (estilo Django). Ej: WHERE campo >= %s AND campo < %s")
+    sql = models.TextField(
+        help_text="Usa placeholders '%s' (estilo Django). Ej: WHERE campo >= %s AND campo < %s"
+    )
+    database_alias = models.CharField(max_length=16, default="externa", choices=[("externa", "XGA habitual"), ("mahou", "XGA Mahou")])
     is_active = models.BooleanField(default=True)
 
     category = models.ForeignKey(
@@ -51,6 +55,10 @@ class QueryParam(models.Model):
     name = models.SlugField(max_length=64)
     label = models.CharField(max_length=120)
     param_type = models.CharField(max_length=10, choices=ParamType.choices)
+    add_one_day = models.BooleanField(
+        default=False,
+        help_text="Sumar un día a este parámetro DATE solo si SQL usa un límite final exclusivo sin sumarlo ya.",
+    )
     required = models.BooleanField(default=False)
     default = models.CharField(max_length=200, blank=True)
 
@@ -73,6 +81,7 @@ class QueryRunLog(models.Model):
 
     def __str__(self) -> str:
         return f"{self.ran_at:%Y-%m-%d %H:%M:%S} {self.user} {self.query.code} ok={self.ok}"
+
 
 class UserCategoryAccess(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
