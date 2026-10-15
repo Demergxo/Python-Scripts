@@ -23,6 +23,9 @@ RAW_DIR = os.path.join(base_path, "raw_files")
 
 def view_order(dataframe, pedido):
 
+    print("DEBUG VIEW:", os.path.abspath(__file__))
+    print("DEBUG COLUMNAS:", dataframe.columns.tolist())
+
     if dataframe is None or dataframe.empty:
         print(Fore.RED + "\nNo hay información EDI para mostrar.")
         return
@@ -49,6 +52,7 @@ def view_order(dataframe, pedido):
         tabla.append([
             fila["Línea"],
             referencia,
+            fila["Cantidad"],
             fila["Tipo FCP"],
             fila.get("Valor FCP", "")
         ])
@@ -68,7 +72,7 @@ def view_order(dataframe, pedido):
         Fore.CYAN
         + tabulate(
             tabla,
-            headers=["Línea", "Referencia", "Tipo FCP", "Valor"],
+            headers=["Línea", "Referencia", "Cantidad", "Tipo FCP", "Valor"],
             tablefmt="fancy_grid",
             stralign="left",
             numalign="center"
@@ -149,12 +153,18 @@ def leer_excel(ruta_archivo):
         return None
 
 def guardar_excel_fcp(dataframe, ruta_salida):
+
+    print("DEBUG EXCEL:", os.path.abspath(__file__))
+    print("DEBUG DESTINO:", ruta_salida)
+    print("DEBUG COLUMNAS:", dataframe.columns.tolist())
+
+
     """Guarda exactamente los datos útiles de la consulta en un Excel formateado."""
     if dataframe is None or dataframe.empty:
         print(Fore.RED + "\n❌ No hay datos FCP para generar el Excel.")
         return False
 
-    columnas = ["Pedido", "Línea", "Referencia", "Tipo FCP", "Valor FCP"]
+    columnas = ["Pedido", "Línea", "Referencia", "Cantidad", "Tipo FCP", "Valor FCP"]
     df_salida = dataframe.copy()
 
     for columna in columnas:
@@ -209,8 +219,9 @@ def guardar_excel_fcp(dataframe, ruta_salida):
                 "A": 18,  # Pedido
                 "B": 10,  # Línea
                 "C": 22,  # Referencia
-                "D": 24,  # Tipo FCP
-                "E": 20,  # Valor FCP
+                "D": 12,  # Cantidad
+                "E": 24,  # Tipo FCP
+                "F": 20,  # Valor FCP
             }
             for columna, ancho in anchos.items():
                 ws.column_dimensions[columna].width = ancho
@@ -749,6 +760,7 @@ def process_files(input_folder):
                     "Pedido": pedido,
                     "Línea": numero_linea,
                     "Referencia": linea["referencia"],
+                    "Cantidad": linea["cantidad"],
                     "Tipo FCP": linea["tipo_fcp"],
                     "Valor FCP": linea["valor_fcp"],
                     "Archivo": filename
@@ -845,44 +857,87 @@ def extract_segments(edi_text):
         "lineas": []
     }
 
-    # Pedido (cabecera). Admite BGM+80E:...+PEDIDO y BGM+80E+PEDIDO
-    match = re.search(r"BGM\+80E(?::[^+]*)?\+([^+']+)", edi_text)
+    # Normalización básica del contenido
+    edi_text = edi_text.replace("\r", "").replace("\n", "")
+
+    # Pedido de cabecera
+    match = re.search(
+        r"BGM\+80E(?::[^+]*)?\+([^+']+)",
+        edi_text
+    )
+
     if match:
         result["pedido"] = match.group(1).strip()
 
-    # Cada bloque LIN corresponde a una referencia/línea del pedido
+    # Cada bloque empieza por LIN+
     bloques = re.split(r"(?=LIN\+)", edi_text)
 
     for bloque in bloques:
+        bloque = bloque.strip()
+
         if not bloque.startswith("LIN+"):
             continue
 
         referencia = None
+        cantidad = 0
         tipo_fcp = "SIN FCP"
         valor_fcp = ""
 
-        pia = re.search(r"PIA\+1\+([^:+']+):SA", bloque)
+        # Referencia
+        pia = re.search(
+            r"PIA\+1\+([^:+']+):SA",
+            bloque
+        )
+
         if pia:
             referencia = pia.group(1).strip()
 
-        # Mantenemos la misma lógica del script original, pero mostrando
-        # también el valor asociado para que la consulta sea más útil.
-        dtm264 = re.search(r"DTM\+264:(\d{8})", bloque)
-        dtm267 = re.search(r"DTM\+267:(\d{8})", bloque)
-        rff_fcp = re.search(r"RFF\+FCP:([^']+)", bloque)
+        # Cantidad QTY+117
+        qty = re.search(
+            r"QTY\+117:(\d+)(?=[:'])",
+            bloque
+        )
+
+        if qty:
+            cantidad = int(qty.group(1))
+
+        # Fechas y FCP
+        dtm264 = re.search(
+            r"DTM\+264:(\d{8})",
+            bloque
+        )
+
+        dtm267 = re.search(
+            r"DTM\+267:(\d{8})",
+            bloque
+        )
+
+        rff_fcp = re.search(
+            r"RFF\+FCP:([^']+)",
+            bloque
+        )
 
         if dtm264:
             tipo_fcp = "FCP DESDE"
-            valor_fcp = datetime.strptime(dtm264.group(1), "%Y%m%d").strftime("%d/%m/%Y")
+            valor_fcp = datetime.strptime(
+                dtm264.group(1),
+                "%Y%m%d"
+            ).strftime("%d/%m/%Y")
+
         elif dtm267:
             tipo_fcp = "FCP EXACTA"
-            valor_fcp = datetime.strptime(dtm267.group(1), "%Y%m%d").strftime("%d/%m/%Y")
+            valor_fcp = datetime.strptime(
+                dtm267.group(1),
+                "%Y%m%d"
+            ).strftime("%d/%m/%Y")
+
         elif rff_fcp:
             tipo_fcp = "FCP POR PORCENTAJE"
             valor_fcp = rff_fcp.group(1).strip()
 
         result["lineas"].append({
             "referencia": referencia,
+            "cantidad": cantidad,
             "tipo_fcp": tipo_fcp,
             "valor_fcp": valor_fcp
         })

@@ -49,6 +49,7 @@ def view_order(dataframe, pedido):
         tabla.append([
             fila["Línea"],
             referencia,
+            fila["Cantidad"],
             fila["Tipo FCP"],
             fila.get("Valor FCP", "")
         ])
@@ -68,7 +69,7 @@ def view_order(dataframe, pedido):
         Fore.CYAN
         + tabulate(
             tabla,
-            headers=["Línea", "Referencia", "Tipo FCP", "Valor"],
+            headers=["Línea", "Referencia", "Cantidad", "Tipo FCP", "Valor"],
             tablefmt="fancy_grid",
             stralign="left",
             numalign="center"
@@ -358,6 +359,7 @@ def process_files(input_folder):
                     "Pedido": pedido,
                     "Línea": numero_linea,
                     "Referencia": linea["referencia"],
+                    "Cantidad": linea["cantidad"],
                     "Tipo FCP": linea["tipo_fcp"],
                     "Valor FCP": linea["valor_fcp"],
                     "Archivo": filename
@@ -480,6 +482,10 @@ def extract_segments(edi_text):
         dtm267 = re.search(r"DTM\+267:(\d{8})", bloque)
         rff_fcp = re.search(r"RFF\+FCP:([^']+)", bloque)
 
+        qty = re.search(r"QTY\+117:(\d+)(?=[:'])", bloque)
+        cantidad = int(qty.group(1)) if qty else 0
+
+
         if dtm264:
             tipo_fcp = "FCP DESDE"
             valor_fcp = datetime.strptime(dtm264.group(1), "%Y%m%d").strftime("%d/%m/%Y")
@@ -492,6 +498,7 @@ def extract_segments(edi_text):
 
         result["lineas"].append({
             "referencia": referencia,
+            "cantidad": cantidad,
             "tipo_fcp": tipo_fcp,
             "valor_fcp": valor_fcp
         })
